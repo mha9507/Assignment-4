@@ -252,3 +252,14 @@ footer {
   letter-spacing: 0.5px;
   z-index: 100;
 }
+
+
+#team, #video, #bts {
+  background-image: url('media/blur.png'); /* adjust path if needed */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(4px); /* optional: softens overlay if you use semi-transparent content */
+  color: #fff; /* optional: improve contrast */
+}
+
