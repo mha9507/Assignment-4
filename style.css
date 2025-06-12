@@ -7,9 +7,9 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f9e8dc; /* ← use this or the other option */
   color: #333;
   scroll-behavior: smooth;
+  background: #e6d5c3;
   padding-top: 90px;
 }
 
@@ -19,7 +19,7 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background: #fffaf5;
+  background: #e6d5c3;
   color: #333;
   padding: 15px 40px;
   z-index: 1000;
@@ -51,7 +51,7 @@ nav {
 nav a {
   text-decoration: none;
   font-size: 1em;
-  color: #444;
+  color: #000000;
   font-weight: 600;
   position: relative;
   padding-bottom: 5px;
@@ -161,7 +161,7 @@ section p {
 .team-intro {
   font-size: 1.2em;
   margin-bottom: 40px;
-  color: #ffeded;;
+  color: #ffeded;
 }
 
 /* Grid Layout */
@@ -263,3 +263,63 @@ footer {
   color: #fff; /* optional: improve contrast */
 }
 
+
+
+/* Hide default cursor */
+body {
+  cursor: none;
+}
+
+
+
+
+
+a:hover ~ .custom-cursor,
+button:hover ~ .custom-cursor {
+  transform: scale(1.5);
+}
+
+
+
+
+@keyframes fadeTrail {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+
+
+
+/* Main cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background-color: hsl(25, 80%, 50%);
+  border: 2px solid hsl(25, 80%, 40%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: transform 0.15s ease-out;
+}
+
+/* Trail dots */
+.cursor-trail {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity, left, top;
+  filter: drop-shadow(0 0 5px hsl(25, 80%, 60%));
+}
