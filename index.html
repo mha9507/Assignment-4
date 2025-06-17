@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Who's Knocking at My Door? - Interactive 3D Experience</title>
+  <title>Teleportation Glasses - Interactive 3D Experience</title>
   <style>
     * {
       margin: 0;
@@ -12,137 +12,197 @@
     }
 
     @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
-
+    
     :root {
-      --primary: #1a0e0a;
-      --secondary: #2d1810;
-      --accent: #ff6b35;
-      --gold: #ffd700;
-      --copper: #b87333;
-      --warm-light: #ffcc99;
-      --shadow: rgba(255, 107, 53, 0.3);
+      --primary: #0b0a1d;
+      --secondary: #1a133c;
+      --accent: #9d4edd;
+      --electric: #c77dff;
+      --neon-glow: rgba(157, 78, 221, 0.5);
+      --highlight: #f5c2e7;
+      --shadow: rgba(157, 78, 221, 0.2);
+      --gold: #FFD700;
+      --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at 30% 70%, #1a0e0a 0%, #0a0404 100%);
+      background: radial-gradient(circle at 30% 70%, #0b0a1d 0%, #05040d 100%);
       color: #fff;
       overflow-x: hidden;
       cursor: none;
       height: 100vh;
+      line-height: 1.6;
     }
 
-    /* Advanced Custom Cursor System */
-    .cursor-system {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 10000;
-    }
+    /* ✨ Custom Cursor System */
+.cursor-system {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10000;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+}
 
-    .cursor-main {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      mix-blend-mode: difference;
-      transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      box-shadow: 0 0 20px var(--accent);
-    }
+.cursor-main {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--electric);
+  border-radius: 50%;
+  mix-blend-mode: normal;
+  transition: transform 0.1s ease-out;
+  box-shadow: 0 0 15px var(--accent);
+  z-index: 10001;
+  will-change: transform;
+  animation: pulse 2s infinite ease-in-out;
+}
 
-    .cursor-trail {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0.7;
-    }
+.cursor-glow {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 60%);
+  border-radius: 50%;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  transition: all 0.2s ease;
+  z-index: 10000;
+}
 
-    .cursor-glow {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-      border-radius: 50%;
-      opacity: 0.3;
-      mix-blend-mode: screen;
-      transition: all 0.3s ease;
-    }
+.cursor-trail {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.9;
+  background: var(--electric);
+  z-index: 10000;
+  will-change: transform, opacity;
+  transition: opacity 0.2s ease-out;
+}
 
-    /* Immersive Loading Screen */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+    /* ⚡ Instant-Load Portal */
     .loading-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: linear-gradient(45deg, #0a0404, #1a0e0a);
+      background: radial-gradient(circle at center, #0b0a1d 0%, #05040d 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      transition: opacity 1s ease, visibility 1s ease;
     }
 
     .loading-content {
       text-align: center;
-      color: var(--accent);
     }
 
-    .loading-door {
-      font-size: 8rem;
-      animation: doorKnock 2s infinite ease-in-out;
-      margin-bottom: 2rem;
-      filter: drop-shadow(0 0 20px var(--accent));
+    .portal-loader {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
     }
 
-    @keyframes doorKnock {
-      0%, 100% { transform: scale(1); }
-      25% { transform: scale(1.1) rotate(-2deg); }
-      50% { transform: scale(0.95) rotate(2deg); }
-      75% { transform: scale(1.05) rotate(-1deg); }
+    .portal-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+
+    .portal-ring.outer {
+      width: 100%;
+      height: 100%;
+      border-top-color: var(--accent);
+      border-bottom-color: var(--accent);
+      animation: spin 2s linear infinite;
+    }
+
+    .portal-ring.middle {
+      width: 70%;
+      height: 70%;
+      top: 15%;
+      left: 15%;
+      border-left-color: var(--electric);
+      border-right-color: var(--electric);
+      animation: spinReverse 1.8s linear infinite;
+    }
+
+    .portal-ring.inner {
+      width: 40%;
+      height: 40%;
+      top: 30%;
+      left: 30%;
+      border-top-color: var(--highlight);
+      border-bottom-color: var(--highlight);
+      animation: spin 1.5s linear infinite;
+    }
+
+    .portal-core {
+      position: absolute;
+      width: 20%;
+      height: 20%;
+      top: 40%;
+      left: 40%;
+      background: var(--accent);
+      border-radius: 50%;
+      filter: blur(4px);
+    }
+
+    .progress-arc {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      clip: rect(0, 60px, 120px, 0);
+      animation: loadComplete 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
     }
 
     .loading-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      color: var(--highlight);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .percentage {
+      font-family: 'Inter', sans-serif;
       font-weight: 700;
-      margin-bottom: 1rem;
-      opacity: 0;
-      animation: fadeInUp 1s ease 0.5s forwards;
+      font-size: 1rem;
+      color: var(--electric);
     }
 
-    .loading-bar {
-      width: 300px;
-      height: 4px;
-      background: rgba(255, 107, 53, 0.2);
-      border-radius: 2px;
-      overflow: hidden;
-      margin: 0 auto;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .loading-progress {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--gold));
-      width: 0%;
-      animation: loadProgress 3s ease-in-out forwards;
+    @keyframes spinReverse {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
     }
 
-    @keyframes loadProgress {
-      to { width: 100%; }
+    @keyframes loadComplete {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(180deg); }
     }
 
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
-      from { opacity: 0; transform: translateY(20px); }
-    }
-
-    /* Main Container */
+    /* 📦 App Container */
     .app-container {
       position: relative;
       width: 100vw;
@@ -150,7 +210,7 @@
       overflow: hidden;
     }
 
-    /* 3D Scene Container */
+    /* 🎮 3D Scene Container */
     #three-scene {
       position: absolute;
       top: 0;
@@ -160,7 +220,7 @@
       z-index: 1;
     }
 
-    /* UI Overlay */
+    /* 🧠 UI Overlay */
     .ui-overlay {
       position: absolute;
       top: 0;
@@ -171,279 +231,150 @@
       pointer-events: none;
     }
 
-    /* Futuristic Navigation */
+    /* Navigation System */
     .nav-system {
       position: fixed;
       top: 30px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 20px;
+      gap: 15px;
+      background: rgba(11, 10, 29, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      border-radius: 50px;
+      padding: 15px 25px;
       z-index: 200;
       pointer-events: all;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     .nav-item {
-      background: rgba(255, 107, 53, 0.1);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 107, 53, 0.3);
-      border-radius: 50px;
       padding: 12px 24px;
-      color: var(--accent);
-      text-decoration: none;
+      font-family: 'Inter', sans-serif;
       font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
-      overflow: hidden;
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 30px;
       cursor: pointer;
-    }
-
-    .nav-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .nav-item:hover::before {
-      left: 100%;
+      transition: var(--transition);
+      font-size: 0.95rem;
+      white-space: nowrap;
     }
 
     .nav-item:hover {
-      background: rgba(255, 107, 53, 0.2);
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+      color: var(--highlight);
+      background: rgba(157, 78, 221, 0.2);
     }
 
     .nav-item.active {
-      background: rgba(255, 107, 53, 0.3);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    /* Video Room Overlay */
-    .video-room-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(26, 14, 10, 0.2);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 150;
-      opacity: 0;
-      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      pointer-events: none;
-    }
-
-    .video-room-overlay.active {
-      display: flex;
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .video-container {
-      position: relative;
-      width: min(80vw, 1000px);
-      height: min(45vw, 562px);
-      background: rgba(45, 24, 16, 0.9);
-      border-radius: 20px;
-      border: 2px solid var(--gold);
-      box-shadow: 
-        0 0 50px rgba(255, 215, 0, 0.3),
-        0 20px 60px rgba(0, 0, 0, 0.8);
-      overflow: hidden;
-      backdrop-filter: blur(20px);
-      animation: videoSlideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes videoSlideIn {
-      from {
-        transform: translateY(100px) scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    .video-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 25px;
-      z-index: 10;
-    }
-
-    .video-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
+      background: var(--accent);
       color: #fff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.5);
     }
 
-    .video-close {
-      width: 35px;
-      height: 35px;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      border-radius: 50%;
-      color: #fff;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .video-close:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
-    }
-
-    .video-iframe-container {
-      position: absolute;
-      top: 60px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #000;
-    }
-
-    .video-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .video-placeholder {
-      position: absolute;
-      top: 60px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--accent);
-      font-size: 1.5rem;
-      text-align: center;
-      padding: 40px;
-    }
-
-    /* Interactive Panel System */
+    /* Interaction Panel */
     .interaction-panel {
       position: fixed;
-      bottom: 30px;
       right: 30px;
-      width: 350px;
-      background: rgba(26, 14, 10, 0.9);
+      bottom: 30px;
+      width: 380px;
+      background: rgba(11, 10, 29, 0.9);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 107, 53, 0.3);
+      border: 1px solid rgba(157, 78, 221, 0.3);
       border-radius: 20px;
-      padding: 30px;
+      padding: 25px;
       z-index: 200;
       pointer-events: all;
-      transform: translateX(400px);
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: var(--transition);
     }
 
     .interaction-panel.active {
-      transform: translateX(0);
+      transform: translateY(0);
+      opacity: 1;
     }
 
     .panel-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--highlight);
       margin-bottom: 20px;
-      text-align: center;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .knock-controls {
-      display: grid;
+    .glasses-controls {
+      display: flex;
+      flex-direction: column;
       gap: 15px;
     }
 
-    .knock-button {
-      background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 215, 0, 0.1));
-      border: 2px solid transparent;
+    .glasses-button {
+      background: linear-gradient(145deg, rgba(157, 78, 221, 0.1), rgba(199, 125, 255, 0.05));
+      border: 2px solid rgba(157, 78, 221, 0.3);
       border-radius: 15px;
       padding: 20px;
-      color: #fff;
-      font-weight: 600;
+      text-align: left;
+      transition: var(--transition);
       cursor: pointer;
-      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      background-clip: padding-box;
     }
 
-    .knock-button::before {
+    .glasses-button::before {
       content: '';
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, var(--accent), var(--gold), var(--copper));
-      border-radius: 17px;
-      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), transparent);
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: var(--transition);
     }
 
-    .knock-button:hover::before {
+    .glasses-button:hover {
+      transform: translateY(-3px);
+      border-color: var(--electric);
+      box-shadow: 0 10px 30px rgba(157, 78, 221, 0.3);
+    }
+
+    .glasses-button:hover::before {
       opacity: 1;
     }
 
-    .knock-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+    .glasses-button.active {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(199, 125, 255, 0.2));
+      border-color: var(--electric);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
     }
 
-    .knock-button.active {
-      background: rgba(255, 107, 53, 0.3);
-      animation: pulseKnock 0.6s ease-in-out;
-    }
-
-    @keyframes pulseKnock {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .knock-title {
-      font-size: 1.1rem;
+    .glasses-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
       font-weight: 700;
+      color: var(--highlight);
       margin-bottom: 8px;
+      transition: var(--transition);
     }
 
-    .knock-desc {
+    .glasses-desc {
       font-size: 0.9rem;
-      opacity: 0.8;
-      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.7);
+      transition: var(--transition);
+    }
+
+    .glasses-button:hover .glasses-title {
+      color: var(--electric);
+    }
+
+    .glasses-button:hover .glasses-desc {
+      color: rgba(255, 255, 255, 0.9);
     }
 
     /* Team Reveal System */
@@ -451,14 +382,15 @@
       position: fixed;
       bottom: 30px;
       left: 30px;
-      background: rgba(26, 14, 10, 0.9);
+      background: rgba(11, 10, 29, 0.9);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 107, 53, 0.3);
+      border: 1px solid rgba(157, 78, 221, 0.3);
       border-radius: 20px;
       padding: 20px;
       z-index: 200;
       pointer-events: all;
       max-width: 300px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
     .team-member {
@@ -479,8 +411,12 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--highlight);
       margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .member-role {
@@ -493,7 +429,7 @@
     .member-bio {
       font-size: 0.9rem;
       line-height: 1.5;
-      opacity: 0.9;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     /* Audio Visualizer */
@@ -513,7 +449,7 @@
 
     .visualizer-bar {
       width: 4px;
-      background: linear-gradient(to top, var(--accent), var(--gold));
+      background: linear-gradient(to top, var(--accent), var(--electric));
       border-radius: 2px;
       transition: height 0.1s ease;
     }
@@ -529,6 +465,114 @@
       z-index: 50;
     }
 
+    /* Video Room Overlay */
+    .video-room-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .video-room-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .video-container {
+      width: 80vw;
+      height: calc(80vw * 9 / 16);
+      max-width: 1200px;
+      max-height: calc(100vh - 100px);
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+    }
+
+    .video-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: rgba(11, 10, 29, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      z-index: 10;
+    }
+
+    .video-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: var(--highlight);
+      font-size: 1.2rem;
+    }
+
+    .video-close {
+      width: 40px;
+      height: 40px;
+      background: rgba(157, 78, 221, 0.2);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .video-close:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
+    }
+
+    .video-iframe-container {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+    }
+
+    .video-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--accent);
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 30px;
+    }
+
     /* Content Sections */
     .content-section {
       position: fixed;
@@ -536,18 +580,20 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(10, 4, 4, 0.95);
+      background: rgba(11, 10, 29, 0.95);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 300;
       opacity: 0;
       transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      pointer-events: none;
     }
 
     .content-section.active {
       display: flex;
       opacity: 1;
+      pointer-events: all;
     }
 
     .section-content {
@@ -555,9 +601,9 @@
       width: 100%;
       text-align: center;
       padding: 60px;
-      background: rgba(26, 14, 10, 0.9);
+      background: rgba(11, 10, 29, 0.95);
       border-radius: 30px;
-      border: 2px solid rgba(255, 107, 53, 0.3);
+      border: 2px solid rgba(157, 78, 221, 0.3);
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(20px);
       animation: contentSlideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -565,13 +611,10 @@
       margin: 20px;
       max-height: 90vh;
       overflow-y: auto;
-      
-      /* Hide scrollbar for all browsers */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
-    /* Hide scrollbar for Webkit browsers */
     .section-content::-webkit-scrollbar {
       display: none;
     }
@@ -582,7 +625,7 @@
       right: 20px;
       width: 40px;
       height: 40px;
-      background: rgba(255, 107, 53, 0.2);
+      background: rgba(157, 78, 221, 0.2);
       border: 2px solid var(--accent);
       border-radius: 50%;
       color: var(--accent);
@@ -591,7 +634,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       backdrop-filter: blur(10px);
     }
 
@@ -599,7 +642,7 @@
       background: var(--accent);
       color: #fff;
       transform: scale(1.1);
-      box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
     }
 
     @keyframes contentSlideIn {
@@ -617,7 +660,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 3rem;
       font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
+      background: linear-gradient(135deg, var(--accent), var(--electric));
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -627,7 +670,7 @@
 
     @keyframes titlePulse {
       from { filter: drop-shadow(0 0 10px var(--accent)); }
-      to { filter: drop-shadow(0 0 30px var(--gold)); }
+      to { filter: drop-shadow(0 0 30px var(--electric)); }
     }
 
     .section-description {
@@ -635,38 +678,39 @@
       line-height: 1.8;
       color: rgba(255, 255, 255, 0.9);
       font-weight: 400;
+      margin-bottom: 30px;
     }
 
     /* Team Grid */
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 25px;
       margin-top: 30px;
       width: 100%;
     }
 
     .team-card {
-      background: linear-gradient(145deg, rgba(255, 107, 53, 0.1), rgba(255, 215, 0, 0.05));
-      border: 2px solid rgba(255, 107, 53, 0.3);
+      background: linear-gradient(145deg, rgba(157, 78, 221, 0.1), rgba(199, 125, 255, 0.05));
+      border: 2px solid rgba(157, 78, 221, 0.3);
       border-radius: 20px;
       padding: 25px 20px;
       text-align: center;
-      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: var(--transition);
       width: 100%;
       max-width: 100%;
     }
 
     .team-card:hover {
       transform: translateY(-8px) scale(1.02);
-      border-color: var(--gold);
-      box-shadow: 0 15px 50px rgba(255, 107, 53, 0.4);
+      border-color: var(--electric);
+      box-shadow: 0 15px 50px rgba(157, 78, 221, 0.4);
     }
 
     .team-avatar {
       width: 90px;
       height: 90px;
-      background: linear-gradient(135deg, var(--accent), var(--gold));
+      background: linear-gradient(135deg, var(--accent), var(--electric));
       border-radius: 50%;
       margin: 0 auto 18px;
       display: flex;
@@ -676,7 +720,7 @@
       font-weight: 700;
       color: #fff;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+      box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
       font-family: 'Playfair Display', serif;
     }
 
@@ -684,13 +728,17 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--gold);
+      color: var(--highlight);
       margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .team-role {
       font-size: 0.9rem;
-      color: var(--accent);
+      color: var(--gold);
       font-weight: 600;
       margin-bottom: 12px;
     }
@@ -709,10 +757,14 @@
     }
 
     .bts-content h3 {
-      color: var(--gold);
+      color: var(--electric);
       margin-bottom: 20px;
       font-size: 1.5rem;
       font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .bts-content p {
@@ -722,7 +774,7 @@
     }
 
     .bts-content strong {
-      color: var(--accent);
+      color: var(--highlight);
       font-weight: 600;
     }
 
@@ -737,10 +789,10 @@
       width: 100%;
       aspect-ratio: 16/9;
       border-radius: 20px;
-      border: 3px solid var(--gold);
+      border: 3px solid var(--electric);
       box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(255, 215, 0, 0.3);
+        0 0 30px rgba(157, 78, 221, 0.3);
       overflow: hidden;
       background: var(--primary);
       position: relative;
@@ -770,6 +822,25 @@
       padding: 30px;
     }
 
+    /* Teleport Flash Effect */
+    .teleport-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle, rgba(157, 78, 221, 0.7) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 9998;
+      animation: teleportFlash 0.5s ease-out forwards;
+    }
+    
+    @keyframes teleportFlash {
+      0% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.5); }
+    }
+
     /* Responsive Design */
     @media (max-width: 1024px) {
       .section-content {
@@ -794,6 +865,17 @@
       
       .cursor-system {
         display: none;
+      }
+      
+      .nav-system {
+        top: 20px;
+        padding: 12px 20px;
+        gap: 10px;
+      }
+      
+      .nav-item {
+        padding: 10px 16px;
+        font-size: 0.85rem;
       }
       
       .section-content {
@@ -849,25 +931,6 @@
         padding: 20px;
       }
       
-      .nav-system {
-        flex-wrap: wrap;
-        top: 15px;
-        left: 15px;
-        right: 15px;
-        transform: none;
-        gap: 8px;
-        padding: 15px;
-        justify-content: center;
-      }
-      
-      .nav-item {
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        flex: 1;
-        min-width: calc(50% - 4px);
-        text-align: center;
-      }
-      
       .team-revealer {
         left: 10px;
         bottom: 10px;
@@ -898,10 +961,6 @@
         font-size: 1rem;
       }
       
-      .video-iframe-container {
-        top: 50px;
-      }
-
       .section-close {
         top: 15px;
         right: 15px;
@@ -911,7 +970,6 @@
       }
       
       .bts-content {
-        text-align: left;
         margin-top: 25px;
       }
       
@@ -945,14 +1003,17 @@
         top: 10px;
         left: 10px;
         right: 10px;
-        padding: 12px;
-        gap: 6px;
+        padding: 10px 15px;
+        gap: 8px;
+        transform: none;
+        width: calc(100vw - 20px);
       }
       
       .nav-item {
         padding: 8px 12px;
         font-size: 0.8rem;
-        min-width: calc(50% - 3px);
+        flex: 1;
+        text-align: center;
       }
       
       .section-content {
@@ -990,15 +1051,15 @@
         margin-bottom: 15px;
       }
       
-      .knock-button {
+      .glasses-button {
         padding: 15px;
       }
       
-      .knock-title {
+      .glasses-title {
         font-size: 1rem;
       }
       
-      .knock-desc {
+      .glasses-desc {
         font-size: 0.85rem;
       }
       
@@ -1025,854 +1086,1067 @@
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
-  <div class="loading-screen" id="loadingScreen">
-    <div class="loading-content">
-      <div class="loading-door">🚪</div>
-      <div class="loading-text">Entering the Experience...</div>
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-content">
+    <div class="portal-loader">
+      <div class="portal-ring outer"></div>
+      <div class="portal-ring middle"></div>
+      <div class="portal-ring inner"></div>
+      <div class="portal-core"></div>
+      <div class="progress-arc"></div>
+    </div>
+    <div class="loading-text">ENGAGING TELEPORTATION</div>
+    <div class="percentage">0%</div>
+  </div>
+</div>
+
+<!-- Advanced Cursor System -->
+<div class="cursor-system">
+  <div class="cursor-main"></div>
+  <div class="cursor-glow"></div>
+</div>
+
+<!-- Main App Container -->
+<div class="app-container">
+  <!-- 3D Scene -->
+  <canvas id="three-scene"></canvas>
+  
+  <!-- Particles Overlay -->
+  <div class="particles-overlay" id="particlesOverlay"></div>
+
+  <!-- Video Room Overlay -->
+  <div class="video-room-overlay" id="videoRoomOverlay">
+    <div class="video-container">
+      <div class="video-header">
+        <div class="video-title">Purple Glasses Interactive Experience</div>
+        <button class="video-close" onclick="closeVideoRoom()">×</button>
+      </div>
+      <div class="video-iframe-container">
+        <iframe 
+          class="video-iframe"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+          title="Purple Glasses Interactive Experience"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+        <div class="video-placeholder">
+          <div>Interactive Video Experience</div>
+          <small style="margin-top: 15px; font-size: 1rem; opacity: 0.7;">
+            Replace the YouTube URL in the iframe src to show your video
+          </small>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Advanced Cursor System -->
-  <div class="cursor-system">
-    <div class="cursor-main"></div>
-    <div class="cursor-glow"></div>
+  <!-- UI Overlay -->
+  <div class="ui-overlay">
+    <!-- Futuristic Navigation -->
+    <nav class="nav-system">
+      <div class="nav-item active" data-scene="room">Room</div>
+      <div class="nav-item" data-scene="video">Experience</div>
+      <div class="nav-item" data-scene="team">Team</div>
+      <div class="nav-item" data-scene="behind">Behind</div>
+    </nav>
+
+    <!-- Audio Visualizer -->
+    <div class="audio-visualizer" id="audioVisualizer">
+      <!-- Bars will be generated by JS -->
+    </div>
+
+    <!-- Interaction Panel -->
+    <div class="interaction-panel" id="interactionPanel">
+      <div class="panel-title">Where Do I Teleport?</div>
+      <div class="glasses-controls">
+        <button class="glasses-button" data-glasses="purple">
+          <div class="glasses-title">Back to Dorm</div>
+          <div class="glasses-desc">Activate the teleportation journey with your purple glasses.</div>
+        </button>
+        <button class="glasses-button" data-glasses="orange">
+          <div class="glasses-title">Bathroom</div>
+          <div class="glasses-desc">Step into a fiery adventure with the orange glasses experience.</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Team Revealer -->
+    <div class="team-revealer" id="teamRevealer">
+      <div class="team-member active" data-member="meera">
+        <div class="member-name">Meera Alzaabi</div>
+        <div class="member-role">Creative Director & Visionary</div>
+        <div class="member-bio">The mastermind behind the interactive narrative, Meera crafted each glasses' unique teleportation journey and emotional impact.</div>
+      </div>
+      <div class="team-member" data-member="ahmad">
+        <div class="member-name">Ahmad Hijazi</div>
+        <div class="member-role">Technical Producer & Sound Designer</div>
+        <div class="member-bio">Ahmad brought technical excellence to every frame, perfecting the audio-visual synchronization that makes each glasses' journey immersive.</div>
+      </div>
+      <div class="team-member" data-member="abdelrahman">
+        <div class="member-name">Abdelrahman Khater</div>
+        <div class="member-role">Performance Director & Creative Consultant</div>
+        <div class="member-bio">Abdelrahman guided the authentic performances and creative direction that brings every teleportation path to life.</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Main App Container -->
-  <div class="app-container">
-    <!-- 3D Scene -->
-    <canvas id="three-scene"></canvas>
-    
-    <!-- Particles Overlay -->
-    <div class="particles-overlay" id="particlesOverlay"></div>
-
-    <!-- Video Room Overlay -->
-    <div class="video-room-overlay" id="videoRoomOverlay">
-      <div class="video-container">
-        <div class="video-header">
-          <div class="video-title">Who's Knocking at My Door?</div>
-          <button class="video-close" onclick="closeVideoRoom()">×</button>
-        </div>
-        <div class="video-iframe-container">
+  <!-- Content Sections -->
+  <!-- Video Experience Section -->
+  <div class="content-section" id="section-video">
+    <div class="section-content">
+      <button class="section-close" onclick="closeSection()">×</button>
+      <h1 class="section-title">The Interactive Glasses Experience</h1>
+      <p class="section-description">
+        Put on the glasses and watch how different lenses open doors to unique teleportation adventures. Each story unfolds from the simple act of wearing your glasses.
+      </p>
+      
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
           <iframe 
-            class="video-iframe"
+            class="experience-video-iframe"
             src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-            title="Who's Knocking at My Door - Interactive Experience"
+            title="Purple Glasses Interactive Experience"
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
             allowfullscreen>
           </iframe>
-          <div class="video-placeholder">
-            <div>Interactive Video Experience</div>
+          <div class="experience-video-placeholder">
+            <div>Your Interactive Video Here</div>
             <small style="margin-top: 15px; font-size: 1rem; opacity: 0.7;">
-              Replace the YouTube URL in the iframe src to show your video
+              Replace the YouTube URL in the iframe src above with your actual video
             </small>
           </div>
         </div>
       </div>
+      
+      <p style="margin-top: 30px; font-size: 1.1rem; opacity: 0.9;">
+        Click on the glasses icons to start your teleportation journey and experience different realities through the lenses.
+      </p>
     </div>
+  </div>
 
-    <!-- UI Overlay -->
-    <div class="ui-overlay">
-      <!-- Futuristic Navigation -->
-      <nav class="nav-system">
-        <div class="nav-item active" data-scene="room">Room</div>
-        <div class="nav-item" data-scene="video">Experience</div>
-        <div class="nav-item" data-scene="team">Team</div>
-        <div class="nav-item" data-scene="behind">Behind</div>
-      </nav>
-
-      <!-- Audio Visualizer -->
-      <div class="audio-visualizer" id="audioVisualizer">
-        <!-- Bars will be generated by JS -->
-      </div>
-
-      <!-- Interaction Panel -->
-      <div class="interaction-panel" id="interactionPanel">
-        <div class="panel-title">Choose Your Knock</div>
-        <div class="knock-controls">
-          <button class="knock-button" data-knock="emergency">
-            <div class="knock-title">Emergency Knock</div>
-            <div class="knock-desc">Fast, frantic, urgent - something's wrong!</div>
-          </button>
-          <button class="knock-button" data-knock="mystery">
-            <div class="knock-title">Mystery Knock</div>
-            <div class="knock-desc">Slow, deliberate, suspenseful - who could it be?</div>
-          </button>
-          <button class="knock-button" data-knock="official">
-            <div class="knock-title">Official Knock</div>
-            <div class="knock-desc">Polite, measured, professional - the RA visit</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Team Revealer -->
-      <div class="team-revealer" id="teamRevealer">
-        <div class="team-member active" data-member="meera">
-          <div class="member-name">Meera Alzaabi</div>
-          <div class="member-role">Creative Director & Visionary</div>
-          <div class="member-bio">The mastermind behind the interactive narrative, Meera crafted each knock's unique personality and emotional impact.</div>
-        </div>
-        <div class="team-member" data-member="ahmad">
-          <div class="member-name">Ahmad Hijazi</div>
-          <div class="member-role">Technical Producer & Sound Designer</div>
-          <div class="member-bio">Ahmad brought technical excellence to every frame, perfecting the audio-visual synchronization that makes each knock feel real.</div>
-        </div>
-        <div class="team-member" data-member="abdelrahman">
-          <div class="member-name">Abdelrahman Khater</div>
-          <div class="member-role">Performance Director & Creative Consultant</div>
-          <div class="member-bio">Abdelrahman guided the authentic performances and creative direction that brings each character to life.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Content Sections -->
-    <!-- Video Experience Section -->
-    <div class="content-section" id="section-video">
-      <div class="section-content">
-        <button class="section-close" onclick="closeSection()">×</button>
-        <h1 class="section-title">The Interactive Experience</h1>
-        <p class="section-description">
-          Watch how three simple knocks can tell completely different stories. Each scenario was filmed in a single dorm room, 
-          transforming an ordinary space into a theater of human emotion and storytelling.
-        </p>
-        
-        <div class="experience-video-container">
-          <div class="experience-video-frame">
-            <iframe 
-              class="experience-video-iframe"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-              title="Who's Knocking at My Door - Interactive Experience"
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              allowfullscreen>
-            </iframe>
-            <div class="experience-video-placeholder">
-              <div>Your Interactive Video Here</div>
-              <small style="margin-top: 15px; font-size: 1rem; opacity: 0.7;">
-                Replace the YouTube URL in the iframe src above with your actual video
-              </small>
-            </div>
+  <!-- Team Section -->
+  <div class="content-section" id="section-team">
+    <div class="section-content">
+      <button class="section-close" onclick="closeSection()">×</button>
+      <h1 class="section-title">Meet the Visionaries</h1>
+      <p class="section-description">
+        The creative minds who transformed a simple concept into an immersive experience. 
+        Each brought their unique perspective to craft something extraordinary.
+      </p>
+      
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">M</div>
+          <div class="team-name">Meera Alzaabi</div>
+          <div class="team-role">Creative Director & Visionary</div>
+          <div class="team-bio">
+            The creative force behind the project's conceptual framework. Meera crafted each glasses' unique teleportation narrative, 
+            ensuring every interaction transports viewers to compelling new realities.
           </div>
         </div>
         
-        <p style="margin-top: 30px; font-size: 1.1rem; opacity: 0.9;">
-          Click on the doors in the room to experience each unique narrative scenario and see how different knocking patterns create entirely different emotional contexts.
-        </p>
-      </div>
-    </div>
-
-    <!-- Team Section -->
-    <div class="content-section" id="section-team">
-      <div class="section-content">
-        <button class="section-close" onclick="closeSection()">×</button>
-        <h1 class="section-title">Meet the Visionaries</h1>
-        <p class="section-description">
-          The creative minds who transformed a simple concept into an immersive experience. 
-          Each brought their unique perspective to craft something extraordinary.
-        </p>
-        
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-avatar">M</div>
-            <div class="team-name">Meera Alzaabi</div>
-            <div class="team-role">Creative Director & Visionary</div>
-            <div class="team-bio">
-              The creative force behind the project's conceptual framework. Meera crafted each knock's unique narrative personality, 
-              ensuring every interaction tells a compelling story that resonates with viewers on an emotional level.
-            </div>
-          </div>
-          
-          <div class="team-card">
-            <div class="team-avatar">A</div>
-            <div class="team-name">Ahmad Hijazi</div>
-            <div class="team-role">Technical Producer & Sound Designer</div>
-            <div class="team-bio">
-              The technical mastermind who brought precision to every frame. Ahmad perfected the audio-visual synchronization 
-              that makes each knock feel authentically urgent, mysterious, or professional.
-            </div>
-          </div>
-          
-          <div class="team-card">
-            <div class="team-avatar">A</div>
-            <div class="team-name">Abdelrahman Khater</div>
-            <div class="team-role">Performance Director & Creative Consultant</div>
-            <div class="team-bio">
-              The performance architect who guided authentic character portrayals. Abdelrahman's creative direction 
-              ensures each scenario feels genuine and emotionally compelling, bringing depth to every interaction.
-            </div>
+        <div class="team-card">
+          <div class="team-avatar">A</div>
+          <div class="team-name">Ahmad Hijazi</div>
+          <div class="team-role">Technical Producer & Sound Designer</div>
+          <div class="team-bio">
+            The technical mastermind who brought precision to every frame. Ahmad perfected the audio-visual synchronization 
+            that makes each glasses experience immersive and authentic.
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Behind the Scenes Section -->
-    <div class="content-section" id="section-behind">
-      <div class="section-content">
-        <button class="section-close" onclick="closeSection()">×</button>
-        <h1 class="section-title">Behind the Magic</h1>
-        <p class="section-description">
-          Every great experience has a story behind it. Discover how we transformed constraints into creativity, 
-          turning a single dorm room into multiple worlds through the power of perspective and imagination.
-        </p>
         
-        <div class="bts-content">
-          <h3>The Creative Process</h3>
-          <p>
-            <strong>Constraint as Catalyst:</strong> 
-            Limited to a single dorm room, we discovered that constraints fuel creativity rather than limit it. 
-            Every angle, every lighting choice, every sound became intentional and meaningful.
-          </p>
-          
-          <p>
-            <strong>Sound as Storyteller:</strong> 
-            Each knock was meticulously crafted and recorded to convey specific emotions and urgency levels. 
-            The rhythm, intensity, and spacing tell the story before you even see who's behind the door.
-          </p>
-          
-          <p>
-            <strong>Performance in Miniature:</strong> 
-            Working in close quarters demanded precise choreography and authentic performances. 
-            Every gesture and expression had to be perfect because there was nowhere to hide imperfection.
-          </p>
-
-          <p>
-            <strong>Technology Meets Art:</strong> 
-            We combined traditional filmmaking techniques with modern interactive design, creating an experience 
-            that bridges the gap between passive viewing and active participation.
-          </p>
+        <div class="team-card">
+          <div class="team-avatar">A</div>
+          <div class="team-name">Abdelrahman Khater</div>
+          <div class="team-role">Performance Director & Creative Consultant</div>
+          <div class="team-bio">
+            The performance architect who guided authentic character portrayals. Abdelrahman's creative direction 
+            ensures each teleportation path feels genuine and emotionally compelling.
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
-  <script>
-    // Advanced Cursor System
-    class AdvancedCursor {
-      constructor() {
-        this.cursor = document.querySelector('.cursor-main');
-        this.glow = document.querySelector('.cursor-glow');
-        this.trails = [];
-        this.mouse = { x: 0, y: 0 };
-        this.pos = { x: 0, y: 0 };
-        
-        // Check if mobile
-        if (window.matchMedia("(max-width: 768px)").matches) {
-          document.querySelector('.cursor-system').style.display = 'none';
-          return;
-        }
-        
-        this.init();
-      }
-
-      init() {
-        // Create trail elements
-        for (let i = 0; i < 15; i++) {
-          const trail = document.createElement('div');
-          trail.className = 'cursor-trail';
-          trail.style.background = `hsl(${20 + i * 3}, 80%, ${60 - i * 2}%)`;
-          trail.style.width = trail.style.height = `${8 - i * 0.3}px`;
-          document.querySelector('.cursor-system').appendChild(trail);
-          this.trails.push({
-            element: trail,
-            x: 0,
-            y: 0,
-            delay: i * 2
-          });
-        }
-
-        document.addEventListener('mousemove', (e) => {
-          this.mouse.x = e.clientX;
-          this.mouse.y = e.clientY;
-        });
-
-        this.animate();
-      }
-
-      animate() {
-        if (!this.cursor) return;
-        
-        // Smooth cursor movement
-        this.pos.x += (this.mouse.x - this.pos.x) * 0.15;
-        this.pos.y += (this.mouse.y - this.pos.y) * 0.15;
-
-        this.cursor.style.left = this.pos.x + 'px';
-        this.cursor.style.top = this.pos.y + 'px';
-        this.glow.style.left = this.pos.x + 'px';
-        this.glow.style.top = this.pos.y + 'px';
-
-        // Animate trails
-        this.trails.forEach((trail, index) => {
-          const delay = index * 0.1;
-          trail.x += (this.pos.x - trail.x) * (0.1 - delay * 0.005);
-          trail.y += (this.pos.y - trail.y) * (0.1 - delay * 0.005);
-          
-          trail.element.style.left = trail.x + 'px';
-          trail.element.style.top = trail.y + 'px';
-          trail.element.style.opacity = 1 - index * 0.08;
-        });
-
-        requestAnimationFrame(() => this.animate());
-      }
-    }
-
-    // Immersive 3D Scene
-    class ImmersiveScene {
-      constructor() {
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ 
-          canvas: document.getElementById('three-scene'),
-          antialias: true,
-          alpha: true
-        });
-        
-        this.mouse = new THREE.Vector2();
-        this.raycaster = new THREE.Raycaster();
-        this.doors = [];
-        this.particles = [];
-        this.lights = [];
-        
-        this.init();
-      }
-
-      init() {
-        // Renderer setup
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.2;
-
-        // Camera position
-        this.camera.position.set(0, 0, 8);
-
-        // Create room environment
-        this.createRoom();
-        this.createDoors();
-        this.createLighting();
-        this.createParticles();
-        this.setupInteractions();
-        
-        this.animate();
-      }
-
-      createRoom() {
-        // Room geometry
-        const roomGeometry = new THREE.BoxGeometry(20, 15, 20);
-        const roomMaterial = new THREE.MeshStandardMaterial({ 
-          color: 0x2d1810,
-          roughness: 0.8,
-          metalness: 0.1,
-          side: THREE.BackSide
-        });
-        const room = new THREE.Mesh(roomGeometry, roomMaterial);
-        this.scene.add(room);
-
-        // Floor
-        const floorGeometry = new THREE.PlaneGeometry(20, 20);
-        const floorMaterial = new THREE.MeshStandardMaterial({ 
-          color: 0x1a0e0a,
-          roughness: 0.9,
-          metalness: 0.0
-        });
-        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.rotation.x = -Math.PI / 2;
-        floor.position.y = -7.5;
-        floor.receiveShadow = true;
-        this.scene.add(floor);
-      }
-
-      createDoors() {
-        const doorPositions = [
-          { x: -6, y: 0, z: -9.5, rotation: 0 },
-          { x: 0, y: 0, z: -9.5, rotation: 0 },
-          { x: 6, y: 0, z: -9.5, rotation: 0 }
-        ];
-
-        doorPositions.forEach((pos, index) => {
-          const doorGroup = new THREE.Group();
-          
-          // Door frame
-          const frameGeometry = new THREE.BoxGeometry(4, 8, 0.5);
-          const frameMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x8B4513,
-            roughness: 0.3,
-            metalness: 0.1
-          });
-          const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-          frame.castShadow = true;
-          doorGroup.add(frame);
-
-          // Door panels
-          const panelGeometry = new THREE.BoxGeometry(1.8, 3.5, 0.3);
-          const panelMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xB87333,
-            roughness: 0.2,
-            metalness: 0.2
-          });
-          
-          const topPanel = new THREE.Mesh(panelGeometry, panelMaterial);
-          topPanel.position.set(0, 1.5, 0.1);
-          topPanel.castShadow = true;
-          doorGroup.add(topPanel);
-
-          const bottomPanel = new THREE.Mesh(panelGeometry, panelMaterial);
-          bottomPanel.position.set(0, -1.5, 0.1);
-          bottomPanel.castShadow = true;
-          doorGroup.add(bottomPanel);
-
-          // Door handle
-          const handleGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8);
-          const handleMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xFFD700,
-            roughness: 0.1,
-            metalness: 0.9
-          });
-          const handle = new THREE.Mesh(handleGeometry, handleMaterial);
-          handle.position.set(1.5, 0, 0.2);
-          handle.rotation.z = Math.PI / 2;
-          handle.castShadow = true;
-          doorGroup.add(handle);
-
-          doorGroup.position.set(pos.x, pos.y, pos.z);
-          doorGroup.rotation.y = pos.rotation;
-          doorGroup.userData = { index, isOpen: false };
-
-          this.doors.push(doorGroup);
-          this.scene.add(doorGroup);
-        });
-      }
-
-      createLighting() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
-        this.scene.add(ambientLight);
-
-        // Main light
-        const mainLight = new THREE.DirectionalLight(0xffffff, 1);
-        mainLight.position.set(5, 10, 5);
-        mainLight.castShadow = true;
-        mainLight.shadow.mapSize.width = 2048;
-        mainLight.shadow.mapSize.height = 2048;
-        this.scene.add(mainLight);
-
-        // Warm accent lights
-        const positions = [
-          { x: -6, y: 3, z: 5 },
-          { x: 6, y: 3, z: 5 },
-          { x: 0, y: 5, z: 0 }
-        ];
-
-        positions.forEach(pos => {
-          const light = new THREE.PointLight(0xff6b35, 0.8, 10);
-          light.position.set(pos.x, pos.y, pos.z);
-          this.lights.push(light);
-          this.scene.add(light);
-        });
-      }
-
-      createParticles() {
-        const particleGeometry = new THREE.BufferGeometry();
-        const particleCount = window.matchMedia("(max-width: 768px)").matches ? 300 : 1000;
-        
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        
-        for (let i = 0; i < particleCount; i++) {
-          positions[i * 3] = (Math.random() - 0.5) * 50;
-          positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
-          positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
-          
-          const color = new THREE.Color();
-          color.setHSL(0.1 + Math.random() * 0.1, 0.8, 0.5 + Math.random() * 0.3);
-          colors[i * 3] = color.r;
-          colors[i * 3 + 1] = color.g;
-          colors[i * 3 + 2] = color.b;
-        }
-        
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        
-        const particleMaterial = new THREE.PointsMaterial({
-          size: 0.1,
-          vertexColors: true,
-          transparent: true,
-          opacity: 0.6,
-          blending: THREE.AdditiveBlending
-        });
-        
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        this.scene.add(particles);
-        this.particles.push(particles);
-      }
-
-      setupInteractions() {
-        document.addEventListener('mousemove', (event) => {
-          this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-          this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        });
-
-        document.addEventListener('click', () => {
-          this.raycaster.setFromCamera(this.mouse, this.camera);
-          const intersects = this.raycaster.intersectObjects(this.doors, true);
-          
-          if (intersects.length > 0) {
-            const door = intersects[0].object.parent;
-            this.knockOnDoor(door);
-          }
-        });
-      }
-
-      knockOnDoor(door) {
-        const knockAnimation = {
-          duration: 600,
-          startTime: Date.now()
-        };
-
-        const animateKnock = () => {
-          const elapsed = Date.now() - knockAnimation.startTime;
-          const progress = elapsed / knockAnimation.duration;
-          
-          if (progress < 1) {
-            const shake = Math.sin(progress * Math.PI * 8) * 0.1 * (1 - progress);
-            door.position.z = -9.5 + shake;
-            door.rotation.x = Math.sin(progress * Math.PI * 12) * 0.02 * (1 - progress);
-            
-            requestAnimationFrame(animateKnock);
-          } else {
-            door.position.z = -9.5;
-            door.rotation.x = 0;
-            
-            // Show video overlay after knock animation
-            setTimeout(() => {
-              showVideoRoom();
-            }, 300);
-          }
-        };
-
-        animateKnock();
-        this.triggerKnockEffects(door.userData.index);
-      }
-
-      triggerKnockEffects(doorIndex) {
-        // Light flash effect
-        this.lights.forEach(light => {
-          const originalIntensity = light.intensity;
-          light.intensity = 2;
-          setTimeout(() => {
-            light.intensity = originalIntensity;
-          }, 200);
-        });
-
-        // Trigger audio visualizer
-        if (audioVisualizer) {
-          audioVisualizer.triggerVisualization(['emergency', 'mystery', 'official'][doorIndex]);
-        }
-        
-        // Show team member
-        if (teamSystem) {
-          teamSystem.showMember(doorIndex);
-        }
-      }
-
-      animate() {
-        requestAnimationFrame(() => this.animate());
-
-        // Camera movement based on mouse
-        this.camera.position.x += (this.mouse.x * 2 - this.camera.position.x) * 0.02;
-        this.camera.position.y += (-this.mouse.y * 1 - this.camera.position.y) * 0.02;
-        this.camera.lookAt(0, 0, 0);
-
-        // Animate particles
-        this.particles.forEach(particle => {
-          particle.rotation.y += 0.002;
-          const positions = particle.geometry.attributes.position.array;
-          for (let i = 1; i < positions.length; i += 3) {
-            positions[i] += Math.sin(Date.now() * 0.001 + i) * 0.001;
-          }
-          particle.geometry.attributes.position.needsUpdate = true;
-        });
-
-        // Dynamic lighting
-        this.lights.forEach((light, index) => {
-          light.intensity = 0.8 + Math.sin(Date.now() * 0.001 + index) * 0.2;
-        });
-
-        this.renderer.render(this.scene, this.camera);
-      }
-    }
-
-    // Audio Visualizer System
-    class AudioVisualizer {
-      constructor() {
-        this.container = document.getElementById('audioVisualizer');
-        this.bars = [];
-        this.isActive = false;
-        this.init();
-      }
-
-      init() {
-        // Create visualizer bars
-        for (let i = 0; i < 12; i++) {
-          const bar = document.createElement('div');
-          bar.className = 'visualizer-bar';
-          bar.style.height = '10px';
-          this.container.appendChild(bar);
-          this.bars.push(bar);
-        }
-      }
-
-      triggerVisualization(type) {
-        if (this.isActive) return;
-        
-        this.isActive = true;
-        const patterns = {
-          emergency: [80, 100, 90, 95, 85, 100, 75, 90, 100, 80, 95, 85],
-          mystery: [30, 50, 70, 60, 80, 45, 65, 90, 55, 40, 75, 60],
-          official: [50, 60, 55, 65, 60, 70, 65, 60, 55, 65, 60, 55]
-        };
-
-        const pattern = patterns[type] || patterns.official;
-        let frame = 0;
-        const maxFrames = 120;
-
-        const animate = () => {
-          if (frame >= maxFrames) {
-            this.isActive = false;
-            this.bars.forEach(bar => bar.style.height = '10px');
-            return;
-          }
-
-          this.bars.forEach((bar, index) => {
-            const intensity = pattern[index] * (1 - frame / maxFrames) * Math.random();
-            bar.style.height = Math.max(10, intensity) + 'px';
-          });
-
-          frame++;
-          requestAnimationFrame(animate);
-        };
-
-        animate();
-      }
-    }
-
-    // Team Management System
-    class TeamSystem {
-      constructor() {
-        this.members = document.querySelectorAll('.team-member');
-        this.currentMember = 0;
-        this.autoRotate();
-      }
-
-      showMember(index) {
-        this.members.forEach(member => member.classList.remove('active'));
-        if (this.members[index]) {
-          this.members[index].classList.add('active');
-          this.currentMember = index;
-        }
-      }
-
-      autoRotate() {
-        setInterval(() => {
-          this.currentMember = (this.currentMember + 1) % this.members.length;
-          this.showMember(this.currentMember);
-        }, 5000);
-      }
-    }
-
-    // Navigation System
-    class NavigationSystem {
-      constructor() {
-        this.navItems = document.querySelectorAll('.nav-item');
-        this.sections = document.querySelectorAll('.content-section');
-        this.currentSection = 'room';
-        this.init();
-      }
-
-      init() {
-        this.navItems.forEach(item => {
-          item.addEventListener('click', () => {
-            const scene = item.dataset.scene;
-            this.switchScene(scene);
-          });
-        });
-      }
-
-      switchScene(scene) {
-        // Update nav active state
-        this.navItems.forEach(item => {
-          item.classList.toggle('active', item.dataset.scene === scene);
-        });
-
-        // Hide all sections
-        this.sections.forEach(section => {
-          section.classList.remove('active');
-        });
-
-        // Show target section (except for room which shows the 3D scene)
-        if (scene !== 'room') {
-          const targetSection = document.getElementById(`section-${scene}`);
-          if (targetSection) {
-            targetSection.classList.add('active');
-          }
-        }
-
-        // Close video room if switching away from room
-        if (scene !== 'room') {
-          closeVideoRoom();
-        }
-
-        this.currentSection = scene;
-      }
-    }
-
-    // Interaction System
-    class InteractionSystem {
-      constructor() {
-        this.panel = document.getElementById('interactionPanel');
-        this.knockButtons = document.querySelectorAll('.knock-button');
-        this.init();
-      }
-
-      init() {
-        // Show panel after delay
-        setTimeout(() => {
-          this.panel.classList.add('active');
-        }, 2000);
-
-        // Knock button interactions
-        this.knockButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const knockType = button.dataset.knock;
-            this.triggerKnock(knockType, button);
-          });
-        });
-      }
-
-      triggerKnock(type, button) {
-        button.classList.add('active');
-        
-        // Trigger all systems
-        if (audioVisualizer) {
-          audioVisualizer.triggerVisualization(type);
-        }
-        
-        // Create screen flash effect
-        const flash = document.createElement('div');
-        flash.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: radial-gradient(circle, rgba(255,107,53,0.3) 0%, transparent 70%);
-          pointer-events: none;
-          z-index: 9998;
-          animation: flashEffect 0.6s ease-out forwards;
-        `;
-        
-        const style = document.createElement('style');
-        style.textContent = `
-          @keyframes flashEffect {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-          }
-        `;
-        document.head.appendChild(style);
-        document.body.appendChild(flash);
-        
-        setTimeout(() => {
-          button.classList.remove('active');
-          flash.remove();
-          style.remove();
-        }, 600);
-      }
-    }
-
-    // Video Room Functions
-    function showVideoRoom() {
-      const videoOverlay = document.getElementById('videoRoomOverlay');
-      videoOverlay.classList.add('active');
-    }
-
-    function closeVideoRoom() {
-      const videoOverlay = document.getElementById('videoRoomOverlay');
-      videoOverlay.classList.remove('active');
-    }
-
-    // Section Close Function
-    function closeSection() {
-      // Hide all content sections
-      document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
-      });
+  <!-- Behind the Scenes Section -->
+  <div class="content-section" id="section-behind">
+    <div class="section-content">
+      <button class="section-close" onclick="closeSection()">×</button>
+      <h1 class="section-title">Behind the Magic</h1>
+      <p class="section-description">
+        Every great experience has a story behind it. Discover how we transformed simple glasses into gateways for immersive storytelling.
+      </p>
       
-      // Set Room as active in navigation
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.toggle('active', item.dataset.scene === 'room');
-      });
-      
-      // Update navigation system current section
-      if (navigationSystem) {
-        navigationSystem.currentSection = 'room';
-      }
-    }
-
-    // Initialize all systems
-    let scene, audioVisualizer, teamSystem, interactionSystem, cursor, navigationSystem;
-
-    // Loading sequence
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loadingScreen').style.opacity = '0';
-        document.getElementById('loadingScreen').style.visibility = 'hidden';
+      <div class="bts-content">
+        <h3>The Creative Process</h3>
+        <p>
+          <strong>Innovation in Simplicity:</strong> 
+          Using just a pair of glasses, we crafted diverse worlds and stories, proving that small props can unlock vast imaginations.
+        </p>
         
-        // Initialize all systems
-        cursor = new AdvancedCursor();
-        scene = new ImmersiveScene();
-        audioVisualizer = new AudioVisualizer();
-        teamSystem = new TeamSystem();
-        interactionSystem = new InteractionSystem();
-        navigationSystem = new NavigationSystem();
+        <p>
+          <strong>Sound as Storyteller:</strong> 
+          Each lens is paired with carefully designed soundscapes and effects that immerse you fully into each teleportation experience.
+        </p>
         
-      }, 3000);
-    });
+        <p>
+          <strong>Performance in Miniature:</strong> 
+          Close-up shots and precise acting bring every teleportation journey to life, making the viewer feel truly part of the story.
+        </p>
 
-    // Resize handler
-    window.addEventListener('resize', () => {
-      if (scene) {
-        scene.camera.aspect = window.innerWidth / window.innerHeight;
-        scene.camera.updateProjectionMatrix();
-        scene.renderer.setSize(window.innerWidth, window.innerHeight);
-      }
-    });
+        <p>
+          <strong>Technology Meets Art:</strong> 
+          By blending traditional filming with modern interactive web design, we created an experience that invites viewers to actively explore new realities.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
-    // Performance monitoring
-    let fps = 0;
-    let lastTime = performance.now();
+
+
+
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+// Advanced Cursor System
+class AdvancedCursor {
+  constructor() {
+    this.cursor = document.querySelector('.cursor-main');
+    this.glow = document.querySelector('.cursor-glow');
+    this.trails = [];
+    this.mouse = { x: 0, y: 0 };
+    this.pos = { x: 0, y: 0 };
     
-    function updateFPS() {
-      const now = performance.now();
-      fps = 1000 / (now - lastTime);
-      lastTime = now;
+    // Check if mobile
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      document.querySelector('.cursor-system').style.display = 'none';
+      return;
+    }
+    
+    this.init();
+  }
+
+  init() {
+    // Create trail elements
+    for (let i = 0; i < 10; i++) {
+      const trail = document.createElement('div');
+      trail.className = 'cursor-trail';
+      trail.style.background = `hsl(${270 + i * 3}, 80%, ${60 - i * 2}%)`;
+      trail.style.width = trail.style.height = `${6 - i * 0.3}px`;
+      document.querySelector('.cursor-system').appendChild(trail);
+      this.trails.push({
+        element: trail,
+        x: 0,
+        y: 0,
+        delay: i * 2
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+    });
+
+    this.animate();
+  }
+
+  animate() {
+    if (!this.cursor) return;
+    
+    this.pos.x += (this.mouse.x - this.pos.x) * 0.3;
+    this.pos.y += (this.mouse.y - this.pos.y) * 0.3;
+
+    this.cursor.style.left = this.pos.x + 'px';
+    this.cursor.style.top = this.pos.y + 'px';
+    this.glow.style.left = this.pos.x + 'px';
+    this.glow.style.top = this.pos.y + 'px';
+
+    // Animate trails
+    this.trails.forEach((trail, index) => {
+      const delay = index * 0.1;
+      trail.x += (this.pos.x - trail.x) * (0.2 - delay * 0.005);
+      trail.y += (this.pos.y - trail.y) * (0.2 - delay * 0.005);
       
-      if (fps < 30) {
-        console.log('Performance optimization triggered');
+      trail.element.style.left = trail.x + 'px';
+      trail.element.style.top = trail.y + 'px';
+      trail.element.style.opacity = 1 - index * 0.1;
+    });
+
+    requestAnimationFrame(() => this.animate());
+  }
+}
+// Slower, Smoother Loading System (3-4 seconds total)
+window.addEventListener('load', () => {
+  const loadingScreen = document.getElementById('loadingScreen');
+  const percentage = document.querySelector('.percentage');
+  
+  // Add portal particles
+  const portalCore = document.querySelector('.portal-core');
+  for (let i = 0; i < 12; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'portal-particle';
+    particle.style.setProperty('--tx', `${Math.random() * 40 - 20}px`);
+    particle.style.setProperty('--ty', `${Math.random() * -60 - 30}px`);
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 1.5}s`;
+    portalCore.appendChild(particle);
+  }
+
+  let progress = 0;
+  const minIncrement = 1;  // Minimum percentage increment
+  const maxIncrement = 4;  // Maximum percentage increment
+  const baseInterval = 100; // Base interval in ms
+  
+  const interval = setInterval(() => {
+    // Calculate increment with easing - slows down as it approaches 100%
+    const remaining = 100 - progress;
+    const increment = Math.min(
+      Math.max(minIncrement, Math.floor(remaining * 0.1 + 0.5)), // Never less than minIncrement
+      maxIncrement // Never more than maxIncrement
+    );
+    
+    progress += increment;
+    
+    // Add some random variation to make it feel more organic
+    const randomVariation = Math.random() > 0.7 ? Math.floor(Math.random() * 2) : 0;
+    progress = Math.min(progress + randomVariation, 100);
+    
+    percentage.textContent = `${progress}%`;
+    
+    if(progress === 100) {
+      clearInterval(interval);
+      // Smooth fade out
+      loadingScreen.style.transition = 'opacity 0.8s ease-out';
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.style.visibility = 'hidden';
+        initAllSystems();
+      }, 800); // Wait for fade out to complete
+    }
+  }, baseInterval + Math.random() * 50); // Slightly randomized intervals
+});
+
+
+
+function initAllSystems() {
+  // Initialize all systems
+  const cursor = new AdvancedCursor();
+  const scene = new ImmersiveScene();
+  const audioVisualizer = new AudioVisualizer();
+  const teamSystem = new TeamSystem();
+  const interactionSystem = new InteractionSystem();
+  const navigationSystem = new NavigationSystem();
+
+  // Make available globally if needed
+  window.app = {
+    cursor,
+    scene,
+    audioVisualizer,
+    teamSystem,
+    interactionSystem,
+    navigationSystem
+  };
+}
+
+// Immersive 3D Scene
+class ImmersiveScene {
+  constructor() {
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.renderer = new THREE.WebGLRenderer({ 
+      canvas: document.getElementById('three-scene'),
+      antialias: true,
+      alpha: true
+    });
+    
+    this.mouse = new THREE.Vector2();
+    this.raycaster = new THREE.Raycaster();
+    this.glasses = null;
+    this.particles = [];
+    this.lights = [];
+    this.rooms = [];
+    this.currentRoom = 0;
+    
+    this.init();
+  }
+
+  init() {
+    // Renderer setup
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
+
+    // Optimized camera setup
+    this.camera.position.set(0, 0.15, 2.5);
+    this.camera.lookAt(0, 0, 0);
+    this.camera.fov = 55;
+    this.camera.updateProjectionMatrix();
+
+    // Create scene elements
+    this.createRooms();
+    this.createGlasses();
+    this.createLighting();
+    this.createParticles();
+    this.setupInteractions();
+    
+    this.animate();
+  }
+
+  createRooms() {
+    // Create 3 different room environments
+    for (let i = 0; i < 3; i++) {
+      const room = new THREE.Group();
+      
+      // Room walls
+      const wallGeometry = new THREE.BoxGeometry(10, 5, 0.2);
+      const wallMaterial = new THREE.MeshStandardMaterial({
+        color: 0x333344,
+        roughness: 0.8,
+        metalness: 0.1
+      });
+      
+      // Back wall
+      const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+      backWall.position.z = -5;
+      room.add(backWall);
+      
+      // Side walls
+      const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+      leftWall.position.x = -5;
+      leftWall.position.z = 0;
+      leftWall.rotation.y = Math.PI / 2;
+      room.add(leftWall);
+      
+      const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+      rightWall.position.x = 5;
+      rightWall.position.z = 0;
+      rightWall.rotation.y = Math.PI / 2;
+      room.add(rightWall);
+      
+      // Floor
+      const floorGeometry = new THREE.BoxGeometry(10, 0.1, 10);
+      const floorMaterial = new THREE.MeshStandardMaterial({
+        color: 0x222233,
+        roughness: 0.7,
+        metalness: 0.2
+      });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.position.y = -2.5;
+      room.add(floor);
+      
+      // Ceiling
+      const ceiling = new THREE.Mesh(floorGeometry, floorMaterial);
+      ceiling.position.y = 2.5;
+      room.add(ceiling);
+      
+      // Room-specific decorations
+      if (i === 0) {
+        // Common room
+        const tableGeometry = new THREE.BoxGeometry(3, 0.5, 2);
+        const tableMaterial = new THREE.MeshStandardMaterial({
+          color: 0x553322,
+          roughness: 0.6
+        });
+        const table = new THREE.Mesh(tableGeometry, tableMaterial);
+        table.position.set(0, -2, -3);
+        room.add(table);
+        
+        // Chair
+        const chairSeat = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 0.2, 1),
+          tableMaterial
+        );
+        chairSeat.position.set(2, -1.8, -2.5);
+        room.add(chairSeat);
+        
+        const chairBack = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 1, 0.1),
+          tableMaterial
+        );
+        chairBack.position.set(2, -1.3, -2);
+        room.add(chairBack);
+      }
+      else if (i === 1) {
+        // Bedroom
+        const bedGeometry = new THREE.BoxGeometry(3, 0.5, 2);
+        const bedMaterial = new THREE.MeshStandardMaterial({
+          color: 0x774455,
+          roughness: 0.7
+        });
+        const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+        bed.position.set(0, -2, -3);
+        room.add(bed);
+        
+        // Pillow
+        const pillow = new THREE.Mesh(
+          new THREE.BoxGeometry(1, 0.2, 0.5),
+          new THREE.MeshStandardMaterial({ color: 0xffffff })
+        );
+        pillow.position.set(0.5, -1.7, -3.5);
+        room.add(pillow);
+      }
+      else {
+        // Bathroom
+        const sinkGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 32);
+        const sinkMaterial = new THREE.MeshStandardMaterial({
+          color: 0xffffff,
+          roughness: 0.1,
+          metalness: 0.9
+        });
+        const sink = new THREE.Mesh(sinkGeometry, sinkMaterial);
+        sink.position.set(0, -1.8, -3);
+        room.add(sink);
+        
+        // Mirror
+        const mirrorGeometry = new THREE.PlaneGeometry(2, 1.5);
+        const mirrorMaterial = new THREE.MeshStandardMaterial({
+          color: 0xdddddd,
+          roughness: 0,
+          metalness: 1
+        });
+        const mirror = new THREE.Mesh(mirrorGeometry, mirrorMaterial);
+        mirror.position.set(0, 0, -4.9);
+        mirror.rotation.y = Math.PI;
+        room.add(mirror);
       }
       
-      requestAnimationFrame(updateFPS);
+      // Hide all rooms except first one
+      room.visible = (i === 0);
+      this.scene.add(room);
+      this.rooms.push(room);
     }
-    updateFPS();
-  </script>
+  }
+
+  createGlasses() {
+    const glassesGroup = new THREE.Group();
+    
+    // Modern frame design
+    const frameGeometry = new THREE.TorusGeometry(0.3, 0.015, 16, 32);
+    const frameMaterial = new THREE.MeshStandardMaterial({
+      color: 0x222222,
+      metalness: 0.95,
+      roughness: 0.05,
+      envMapIntensity: 0.5
+    });
+
+    // Left frame
+    const leftFrame = new THREE.Mesh(frameGeometry, frameMaterial);
+    leftFrame.position.set(-0.35, 0, 0);
+
+    // Right frame
+    const rightFrame = new THREE.Mesh(frameGeometry, frameMaterial);
+    rightFrame.position.set(0.35, 0, 0);
+
+    // Bridge
+    const bridge = new THREE.Mesh(
+      new THREE.BoxGeometry(0.45, 0.015, 0.01),
+      frameMaterial
+    );
+
+    // Futuristic lenses
+    const lensGeometry = new THREE.CircleGeometry(0.25, 32);
+    const lensMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x4a8fe7,
+      transmission: 0.95,
+      roughness: 0.01,
+      thickness: 0.1,
+      ior: 1.45,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.05,
+      side: THREE.DoubleSide
+    });
+
+    const leftLens = new THREE.Mesh(lensGeometry, lensMaterial);
+    leftLens.position.set(-0.35, 0, 0.008);
+    
+    const rightLens = new THREE.Mesh(lensGeometry, lensMaterial);
+    rightLens.position.set(0.35, 0, 0.008);
+
+    // Holographic effect
+    const hologramGeometry = new THREE.RingGeometry(0.2, 0.25, 32);
+    const hologramMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffff,
+      transparent: true,
+      opacity: 0.3,
+      blending: THREE.AdditiveBlending
+    });
+
+    const leftHologram = new THREE.Mesh(hologramGeometry, hologramMaterial);
+    leftHologram.position.set(-0.35, 0, 0.01);
+    leftHologram.rotation.x = Math.PI / 2;
+    
+    const rightHologram = new THREE.Mesh(hologramGeometry, hologramMaterial);
+    rightHologram.position.set(0.35, 0, 0.01);
+    rightHologram.rotation.x = Math.PI / 2;
+
+    // Add all parts
+    glassesGroup.add(
+      leftFrame,
+      rightFrame,
+      bridge,
+      leftLens,
+      rightLens,
+      leftHologram,
+      rightHologram
+    );
+
+    // Positioning and scale
+    glassesGroup.position.set(0, 0.1, 0.5);
+    glassesGroup.scale.set(1.1, 1.1, 1.1);
+    glassesGroup.rotation.set(0, Math.PI, 0);
+
+    // Interactive lighting
+    const rimLight = new THREE.PointLight(0x4a8fe7, 0.4, 1);
+    rimLight.position.set(0, 0, 0.2);
+    glassesGroup.add(rimLight);
+
+    this.scene.add(glassesGroup);
+    this.glasses = glassesGroup;
+    this.glasses.userData = {
+      isActive: false,
+      lensEffect: { material: lensMaterial }
+    };
+  }
+
+  createLighting() {
+    // Ambient light
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+    this.scene.add(ambientLight);
+
+    // Main light
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+    mainLight.position.set(5, 10, 5);
+    mainLight.castShadow = true;
+    mainLight.shadow.mapSize.width = 2048;
+    mainLight.shadow.mapSize.height = 2048;
+    this.scene.add(mainLight);
+
+    // Purple accent lights
+    const positions = [
+      { x: -6, y: 3, z: 5 },
+      { x: 6, y: 3, z: 5 },
+      { x: 0, y: 5, z: 0 }
+    ];
+
+    positions.forEach(pos => {
+      const light = new THREE.PointLight(0x800080, 0.8, 10);
+      light.position.set(pos.x, pos.y, pos.z);
+      this.lights.push(light);
+      this.scene.add(light);
+    });
+  }
+
+  createParticles() {
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleCount = window.matchMedia("(max-width: 768px)").matches ? 300 : 1000;
+    
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 50;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      
+      const color = new THREE.Color();
+      color.setHSL(0.8, 0.8, 0.5 + Math.random() * 0.3);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+    }
+    
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.1,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending
+    });
+    
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    this.scene.add(particles);
+    this.particles.push(particles);
+  }
+
+  setupInteractions() {
+    document.addEventListener('mousemove', (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    document.addEventListener('click', () => {
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObject(this.glasses, true);
+      
+      if (intersects.length > 0) {
+        this.useGlasses();
+      }
+    });
+  }
+
+  useGlasses() {
+    if (this.glasses.userData.isActive) return;
+    
+    this.glasses.userData.isActive = true;
+    
+    // Activate purple lens effect
+    const lens = this.glasses.userData.lensEffect;
+    const flashDuration = 1000;
+    const startTime = Date.now();
+    
+    const animateFlash = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = elapsed / flashDuration;
+      
+      if (progress < 1) {
+        // Intense flash at midpoint
+        const intensity = progress < 0.5 ? 
+          progress * 2 : 
+          1 - (progress - 0.5) * 2;
+        
+        lens.material.opacity = intensity * 0.8;
+        lens.scale.set(1 + intensity * 3, 1 + intensity * 3, 1);
+        
+        // Shake effect
+        this.glasses.rotation.z = Math.sin(progress * Math.PI * 10) * 0.1;
+        
+        // Light effects
+        this.lights.forEach(light => {
+          light.intensity = 1 + intensity * 2;
+        });
+        
+        requestAnimationFrame(animateFlash);
+      } else {
+        // Reset glasses
+        lens.material.opacity = 0;
+        lens.scale.set(1, 1, 1);
+        this.glasses.rotation.z = 0;
+        this.glasses.userData.isActive = false;
+        
+        // Switch to next room
+        this.switchRoom();
+      }
+    };
+    
+    // Trigger audio effect
+    if (window.app && window.app.audioVisualizer) {
+      window.app.audioVisualizer.triggerVisualization('teleport');
+    }
+    
+    // Create screen flash
+    const flash = document.createElement('div');
+    flash.className = 'teleport-flash';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 500);
+    
+    animateFlash();
+  }
+
+  switchRoom() {
+    // Hide current room
+    this.rooms[this.currentRoom].visible = false;
+    
+    // Show next room (cycle through rooms)
+    this.currentRoom = (this.currentRoom + 1) % this.rooms.length;
+    this.rooms[this.currentRoom].visible = true;
+    
+    // Room-specific effects
+    if (this.currentRoom === 1) { // Common room
+      // Trigger flickering lights
+      this.lights.forEach(light => {
+        const originalIntensity = light.intensity;
+        
+        // Random flicker pattern
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            light.intensity = Math.random() > 0.3 ? originalIntensity : 0;
+          }, i * 200);
+        }
+        
+        setTimeout(() => {
+          light.intensity = originalIntensity;
+        }, 1200);
+      });
+      
+      // Play sound effect after delay
+      setTimeout(() => {
+        if (window.app && window.app.audioVisualizer) {
+          window.app.audioVisualizer.triggerVisualization('sound');
+        }
+      }, 1500);
+    }
+    else if (this.currentRoom === 2) { // Bathroom
+      // Mirror effect - delayed
+      setTimeout(() => {
+        const mirror = this.rooms[this.currentRoom].children.find(child => 
+          child.material && child.material.metalness > 0.5
+        );
+        
+        if (mirror) {
+          // Make mirror glow purple briefly
+          mirror.material.color.setHex(0x800080);
+          mirror.material.emissive = new THREE.Color(0x800080);
+          mirror.material.emissiveIntensity = 1;
+          
+          setTimeout(() => {
+            mirror.material.color.setHex(0xdddddd);
+            mirror.material.emissiveIntensity = 0;
+          }, 1000);
+        }
+      }, 2000);
+    }
+  }
+
+  animate() {
+    requestAnimationFrame(() => this.animate());
+
+    // Camera movement based on mouse
+    this.camera.position.x += (this.mouse.x * 2 - this.camera.position.x) * 0.02;
+    this.camera.position.y += (-this.mouse.y * 1 - this.camera.position.y) * 0.02;
+    this.camera.lookAt(0, 0, 0);
+
+    // Animate particles
+    this.particles.forEach(particle => {
+      particle.rotation.y += 0.002;
+      const positions = particle.geometry.attributes.position.array;
+      for (let i = 1; i < positions.length; i += 3) {
+        positions[i] += Math.sin(Date.now() * 0.001 + i) * 0.001;
+      }
+      particle.geometry.attributes.position.needsUpdate = true;
+    });
+
+    // Dynamic lighting
+    this.lights.forEach((light, index) => {
+      light.intensity = 0.8 + Math.sin(Date.now() * 0.001 + index) * 0.2;
+    });
+
+    this.renderer.render(this.scene, this.camera);
+  }
+}
+
+// Audio Visualizer System
+class AudioVisualizer {
+  constructor() {
+    this.container = document.getElementById('audioVisualizer');
+    this.bars = [];
+    this.isActive = false;
+    this.init();
+  }
+
+  init() {
+    // Create visualizer bars
+    for (let i = 0; i < 12; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'visualizer-bar';
+      bar.style.height = '10px';
+      bar.style.background = `hsl(${270 + i * 5}, 80%, 50%)`;
+      this.container.appendChild(bar);
+      this.bars.push(bar);
+    }
+  }
+
+  triggerVisualization(type) {
+    if (this.isActive) return;
+    
+    this.isActive = true;
+    const patterns = {
+      teleport: [90, 30, 70, 20, 80, 40, 60, 30, 90, 50, 70, 40],
+      sound: [40, 70, 50, 80, 60, 90, 50, 70, 60, 80, 50, 70],
+      mystery: [30, 60, 40, 70, 50, 80, 40, 60, 50, 70, 40, 60]
+    };
+
+    const pattern = patterns[type] || patterns.teleport;
+    let frame = 0;
+    const maxFrames = type === 'teleport' ? 60 : 120;
+
+    const animate = () => {
+      if (frame >= maxFrames) {
+        this.isActive = false;
+        this.bars.forEach(bar => bar.style.height = '10px');
+        return;
+      }
+
+      this.bars.forEach((bar, index) => {
+        const intensity = pattern[index] * (1 - frame / maxFrames) * 
+          (type === 'teleport' ? Math.random() * 2 : Math.random());
+        bar.style.height = Math.max(10, intensity) + 'px';
+        
+        // Extra effects for teleport
+        if (type === 'teleport') {
+          bar.style.opacity = 0.5 + Math.random() * 0.5;
+        }
+      });
+
+      frame++;
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }
+}
+
+// Team Management System
+class TeamSystem {
+  constructor() {
+    this.members = document.querySelectorAll('.team-member');
+    this.currentMember = 0;
+    this.autoRotate();
+  }
+
+  showMember(index) {
+    this.members.forEach(member => member.classList.remove('active'));
+    if (this.members[index]) {
+      this.members[index].classList.add('active');
+      this.currentMember = index;
+    }
+  }
+
+  autoRotate() {
+    setInterval(() => {
+      this.currentMember = (this.currentMember + 1) % this.members.length;
+      this.showMember(this.currentMember);
+    }, 5000);
+  }
+}
+
+// Navigation System
+class NavigationSystem {
+  constructor() {
+    this.navItems = document.querySelectorAll('.nav-item');
+    this.sections = document.querySelectorAll('.content-section');
+    this.currentSection = 'room';
+    this.init();
+  }
+
+  init() {
+    this.navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const scene = item.dataset.scene;
+        this.switchScene(scene);
+      });
+    });
+  }
+
+  switchScene(scene) {
+    // Update nav active state
+    this.navItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.scene === scene);
+    });
+
+    // Hide all sections
+    this.sections.forEach(section => {
+      section.classList.remove('active');
+    });
+
+    // Show target section (except for room which shows the 3D scene)
+    if (scene !== 'room') {
+      const targetSection = document.getElementById(`section-${scene}`);
+      if (targetSection) {
+        targetSection.classList.add('active');
+      }
+    }
+
+    this.currentSection = scene;
+  }
+}
+
+// Interaction System
+class InteractionSystem {
+  constructor() {
+    this.panel = document.getElementById('interactionPanel');
+    this.glassesButtons = document.querySelectorAll('.glasses-button');
+    this.init();
+  }
+
+  init() {
+    // Show panel after delay
+    setTimeout(() => {
+      this.panel.classList.add('active');
+    }, 2000);
+
+    // Glasses button interactions
+    this.glassesButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const glassesType = button.dataset.glasses;
+        this.triggerGlasses(glassesType, button);
+      });
+    });
+  }
+
+  triggerGlasses(type, button) {
+    button.classList.add('active');
+    
+    // Trigger all systems
+    if (window.app && window.app.audioVisualizer) {
+      window.app.audioVisualizer.triggerVisualization(type);
+    }
+    
+    // Create screen flash effect
+    const flash = document.createElement('div');
+    flash.className = 'teleport-flash';
+    document.body.appendChild(flash);
+    
+    setTimeout(() => {
+      button.classList.remove('active');
+      flash.remove();
+      
+      // If scene exists, trigger glasses effect
+      if (window.app && window.app.scene) {
+        window.app.scene.useGlasses();
+      }
+    }, 1000);
+  }
+}
+
+// Video Room Functions
+function showVideoRoom() {
+  const videoOverlay = document.getElementById('videoRoomOverlay');
+  videoOverlay.classList.add('active');
+}
+
+function closeVideoRoom() {
+  const videoOverlay = document.getElementById('videoRoomOverlay');
+  videoOverlay.classList.remove('active');
+}
+
+// Section Close Function
+function closeSection() {
+  // Hide all content sections
+  document.querySelectorAll('.content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Set Room as active in navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.scene === 'room');
+  });
+  
+  // Update navigation system current section
+  if (window.app && window.app.navigationSystem) {
+    window.app.navigationSystem.currentSection = 'room';
+  }
+}
+
+// Resize handler
+window.addEventListener('resize', () => {
+  if (window.app && window.app.scene) {
+    window.app.scene.camera.aspect = window.innerWidth / window.innerHeight;
+    window.app.scene.camera.updateProjectionMatrix();
+    window.app.scene.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+});
+</script>
 </body>
 </html>
