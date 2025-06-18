@@ -1469,17 +1469,23 @@
     <button class="section-close" onclick="closeSection()">×</button>
     <h1 class="section-title">Behind the Magic</h1>
 
+
+    <!-- just replace scr with ur youtube link -->
     <div class="experience-video-container">
       <div class="experience-video-frame">
         <iframe 
+          id="bts-video"
           class="experience-video-iframe"
-          src="https://www.youtube.com/embed/VIDEO_ID_HERE" 
+          src="https://www.youtube.com/embed/AoM1GtX3Oko?si=qFlKmqEySsK0h9oU"  
           title="Behind the Scenes"
           frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen>
         </iframe>
-        <div class="experience-video-placeholder">
+
+
+        <!-- Fallback placeholder (only shows if video fails to load) -->
+        <div class="experience-video-placeholder" style="display: none;">
           <div>Your Behind the Scenes Video Here</div>
           <small style="margin-top: 15px; font-size: 1rem; opacity: 0.7;">
             Replace the YouTube URL in the iframe src above with your actual BTS video
@@ -1493,6 +1499,7 @@
     </div>
   </div>
 </div>
+
 
 
 
