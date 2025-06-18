@@ -11,7 +11,7 @@
       box-sizing: border-box;
     }
 
-    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
     
     :root {
       --primary: #0b0a1d;
@@ -740,7 +740,7 @@
     color: #fff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Inter', sans-serif;
   }
 
   .team-name {
@@ -811,6 +811,119 @@
       font-size: 1.3rem;
       text-align: center;
       padding: 30px;
+    }
+
+    /* Video Experience Styles */
+    .video-section {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .video-section.active-video-section {
+      display: block;
+    }
+
+    .decision-point {
+      background: linear-gradient(145deg, rgba(157, 78, 221, 0.1), rgba(199, 125, 255, 0.05));
+      padding: 30px;
+      border-radius: 20px;
+      margin: 30px auto;
+      max-width: 600px;
+      border: 2px solid rgba(157, 78, 221, 0.3);
+      display: none;
+    }
+
+    .decision-point.active-decision {
+      display: block;
+    }
+
+    .decision-point h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--highlight);
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .decision-point p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 25px;
+    }
+
+    .decision-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .decision-buttons button {
+      background: linear-gradient(145deg, var(--accent), var(--electric));
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.3);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .decision-buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(157, 78, 221, 0.5);
+      filter: brightness(1.1);
+    }
+
+    .ending-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .ending-section h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--highlight);
+      margin: 20px 0;
+      background: linear-gradient(135deg, var(--accent), var(--electric));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ending-section p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .restart-button {
+      background: linear-gradient(145deg, var(--accent), var(--electric));
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 5px 20px rgba(157, 78, 221, 0.3);
+      margin-top: 20px;
+    }
+
+    .restart-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(157, 78, 221, 0.5);
+      filter: brightness(1.1);
     }
 
     /* Teleport Flash Effect */
@@ -982,6 +1095,15 @@
         font-size: 1.1rem;
         padding: 20px;
       }
+
+      .decision-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .decision-buttons button {
+        width: 100%;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1135,37 +1257,154 @@
     </nav>
 
 
-
-
-  <!-- Content Sections -->
-  <!-- Video Experience Section -->
-  <div class="content-section" id="section-video">
-    <div class="section-content">
-      <button class="section-close" onclick="closeSection()">×</button>
-      <h1 class="section-title">Glasses On</h1>
-
+<!-- Content Sections -->
+<!-- Video Experience Section -->
+<div class="content-section" id="section-video">
+  <div class="section-content">
+    <button class="section-close" onclick="closeSection()">×</button>
+    <h1 class="section-title">Glasses On</h1>
+    
+    <!-- Intro Video Section -->
+    <div id="intro-section" class="video-section active-video-section">
       <div class="experience-video-container">
         <div class="experience-video-frame">
           <iframe 
+            id="intro-video"
             class="experience-video-iframe"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-            title="Purple Glasses Interactive Experience"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1&autoplay=1" 
+            title="Purple Glasses Intro"
             frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
           </iframe>
-          <div class="experience-video-placeholder">
-            <div>Your Interactive Video Here</div>
-            <small style="margin-top: 15px; font-size: 1rem; opacity: 0.7;">
-              Replace the YouTube URL in the iframe src above with your actual video
-            </small>
-          </div>
         </div>
-
-      <p class="section-description">
-      Wear the glasses and unlock teleportation — each view leads to a new reality.      </p>
-      
       </div>
+    </div>
+
+    <!-- Jump 1 Video Section -->
+    <div id="jump1-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="jump1-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Purple Glasses Jump"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision 1: Where to go? -->
+    <div id="decision1-section" class="decision-point">
+      <h2>Where should I go?</h2>
+      <p>The teleportation worked, but now you need to choose your destination.</p>
+      <div class="decision-buttons">
+        <button id="dorm-choice">Back to Dorm Room</button>
+        <button id="bathroom-choice">Bathroom</button>
+      </div>
+    </div>
+
+    <!-- Dorm Branch -->
+    <div id="dorm-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="dorm-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Dorm Room Branch"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bathroom Branch -->
+    <div id="bathroom-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="bathroom-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Bathroom Branch"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Return -->
+    <div id="final-return-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="final-return-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Final Return"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision 2: What now? -->
+    <div id="decision2-section" class="decision-point">
+      <h2>What now?</h2>
+      <p>The laptop screen says: "Welcome back. Choose wisely."</p>
+      <div class="decision-buttons">
+        <button id="use-glasses">Use glasses again</button>
+        <button id="destroy-glasses">Destroy the glasses</button>
+      </div>
+    </div>
+
+    <!-- Ending Use -->
+    <div id="ending-use-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="ending-use-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Ending - Use Glasses"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+      <div class="ending-section">
+        <button class="restart-button" id="restart-btn1">Restart Experience</button>
+      </div>
+    </div>
+
+    <!-- Ending Destroy -->
+    <div id="ending-destroy-section" class="video-section">
+      <div class="experience-video-container">
+        <div class="experience-video-frame">
+          <iframe 
+            id="ending-destroy-video"
+            class="experience-video-iframe"
+            src="https://www.youtube.com/embed/AoM1GtX3Oko?enablejsapi=1" 
+            title="Ending - Destroy Glasses"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+      <div class="ending-section">
+        <button class="restart-button" id="restart-btn2">Restart Experience</button>
+      </div>
+    </div>
+
+      <p class="section-description" style="margin-top: 20px;">
+        Wear the glasses and unlock teleportation — each view leads to a new reality.
+      </p>
     </div>
   </div>
 
@@ -1392,18 +1631,152 @@ window.addEventListener('load', () => {
   }, baseInterval + Math.random() * 50); // Slightly randomized intervals
 });
 
+// YouTube Player API for Video Experience
+let players = {};
 
+function initYouTubePlayers() {
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
 
+window.onYouTubeIframeAPIReady = function() {
+  // Create players for all video iframes
+  createPlayer('intro-video', 'AoM1GtX3Oko', onIntroEnd);
+  createPlayer('jump1-video', 'AoM1GtX3Oko', onJump1End);
+  createPlayer('dorm-video', 'AoM1GtX3Oko', onDormEnd);
+  createPlayer('bathroom-video', 'AoM1GtX3Oko', onBathroomEnd);
+  createPlayer('final-return-video', 'AoM1GtX3Oko', onFinalReturnEnd);
+  createPlayer('ending-use-video', 'AoM1GtX3Oko');
+  createPlayer('ending-destroy-video', 'AoM1GtX3Oko');
+};
 
+function createPlayer(elementId, videoId, onEndCallback) {
+  players[elementId] = new YT.Player(elementId, {
+    videoId: videoId,
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': function(event) {
+        if (event.data === YT.PlayerState.ENDED && onEndCallback) {
+          onEndCallback();
+        }
+      }
+    },
+    playerVars: {
+      'autoplay': 0,
+      'controls': 1,
+      'rel': 0,
+      'modestbranding': 1,
+      'mute': 1
+    }
+  });
+}
 
+function onPlayerReady(event) {
+  // Player is ready
+}
 
+// Video progression callbacks
+function onIntroEnd() {
+  hideAllVideoSections();
+  document.getElementById('jump1-section').classList.add('active-video-section');
+  players['jump1-video'].playVideo();
+}
 
+function onJump1End() {
+  hideAllVideoSections();
+  document.getElementById('decision1-section').classList.add('active-decision');
+}
 
+function onDormEnd() {
+  hideAllVideoSections();
+  document.getElementById('final-return-section').classList.add('active-video-section');
+  players['final-return-video'].playVideo();
+}
 
+function onBathroomEnd() {
+  hideAllVideoSections();
+  document.getElementById('final-return-section').classList.add('active-video-section');
+  players['final-return-video'].playVideo();
+}
 
+function onFinalReturnEnd() {
+  hideAllVideoSections();
+  document.getElementById('decision2-section').classList.add('active-decision');
+}
 
+function hideAllVideoSections() {
+  document.querySelectorAll('.video-section').forEach(section => {
+    section.classList.remove('active-video-section');
+  });
+  document.querySelectorAll('.decision-point').forEach(section => {
+    section.classList.remove('active-decision');
+  });
+}
 
+function restartExperience() {
+  hideAllVideoSections();
+  document.getElementById('intro-section').classList.add('active-video-section');
+  if (players['intro-video']) {
+    players['intro-video'].seekTo(0);
+    players['intro-video'].playVideo();
+  }
+}
 
+// Initialize video experience buttons
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize YouTube players
+  initYouTubePlayers();
+  
+  // Decision buttons
+  const dormChoice = document.getElementById('dorm-choice');
+  const bathroomChoice = document.getElementById('bathroom-choice');
+  const useGlasses = document.getElementById('use-glasses');
+  const destroyGlasses = document.getElementById('destroy-glasses');
+  const restartBtn1 = document.getElementById('restart-btn1');
+  const restartBtn2 = document.getElementById('restart-btn2');
+  
+  if (dormChoice) {
+    dormChoice.addEventListener('click', function() {
+      hideAllVideoSections();
+      document.getElementById('dorm-section').classList.add('active-video-section');
+      players['dorm-video'].playVideo();
+    });
+  }
+  
+  if (bathroomChoice) {
+    bathroomChoice.addEventListener('click', function() {
+      hideAllVideoSections();
+      document.getElementById('bathroom-section').classList.add('active-video-section');
+      players['bathroom-video'].playVideo();
+    });
+  }
+  
+  if (useGlasses) {
+    useGlasses.addEventListener('click', function() {
+      hideAllVideoSections();
+      document.getElementById('ending-use-section').classList.add('active-video-section');
+      players['ending-use-video'].playVideo();
+    });
+  }
+  
+  if (destroyGlasses) {
+    destroyGlasses.addEventListener('click', function() {
+      hideAllVideoSections();
+      document.getElementById('ending-destroy-section').classList.add('active-video-section');
+      players['ending-destroy-video'].playVideo();
+    });
+  }
+  
+  if (restartBtn1) {
+    restartBtn1.addEventListener('click', restartExperience);
+  }
+  
+  if (restartBtn2) {
+    restartBtn2.addEventListener('click', restartExperience);
+  }
+});
 
 function initAllSystems() {
   // Initialize all systems
@@ -2025,6 +2398,11 @@ class NavigationSystem {
       const targetSection = document.getElementById(`section-${scene}`);
       if (targetSection) {
         targetSection.classList.add('active');
+        
+        // If switching to video section, ensure intro video is showing
+        if (scene === 'video') {
+          restartExperience();
+        }
       }
     }
 
@@ -2044,7 +2422,9 @@ class InteractionSystem {
 
   init() {
     setTimeout(() => {
-      this.panel.classList.add('active');
+      if (this.panel) {
+        this.panel.classList.add('active');
+      }
     }, 2000);
 
     this.glassesButtons.forEach(button => {
