@@ -70,35 +70,20 @@ class AdvancedCursor {
 window.addEventListener('load', () => {
   const loadingScreen = document.getElementById('loadingScreen');
   const percentage = document.querySelector('.percentage');
-
+  
   // Add portal particles
   const portalCore = document.querySelector('.portal-core');
-  
-  // Generate 12 animated particles for the portal effect
   for (let i = 0; i < 12; i++) {
     const particle = document.createElement('div');
     particle.className = 'portal-particle';
-    
-    // Random horizontal and vertical translation (creates dynamic spread)
     particle.style.setProperty('--tx', `${Math.random() * 40 - 20}px`);
     particle.style.setProperty('--ty', `${Math.random() * -60 - 30}px`);
-    
-    // Random position within the portal container
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.top = `${Math.random() * 100}%`;
-
-    // Randomize when each particle animation starts
     particle.style.animationDelay = `${Math.random() * 1.5}s`;
-
-    // Add the particle to the portal core
     portalCore.appendChild(particle);
   }
-});
 
-
-
-
-  
   let progress = 0;
   const minIncrement = 1;  // Minimum percentage increment
   const maxIncrement = 4;  // Maximum percentage increment
@@ -143,7 +128,7 @@ function initYouTubePlayers() {
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
-
+// ─── 1) Replace your entire onYouTubeIframeAPIReady block with this ───
 window.onYouTubeIframeAPIReady = function() {
   // Intro → decision #1
   createPlayer('intro-video',        'uiK0oMhOsNQ',  onIntroEnd);
@@ -161,122 +146,87 @@ window.onYouTubeIframeAPIReady = function() {
 };
 
 
-// Function to create and embed a YouTube player
 function createPlayer(elementId, videoId, onEndCallback) {
-  // Store the new player instance in the global 'players' object
   players[elementId] = new YT.Player(elementId, {
-    videoId: videoId, // YouTube video ID to load
+    videoId: videoId,
     events: {
-      'onReady': onPlayerReady, // Triggered when player is ready
+      'onReady': onPlayerReady,
       'onStateChange': function(event) {
-        // If video ends and a callback is provided, call it
         if (event.data === YT.PlayerState.ENDED && onEndCallback) {
           onEndCallback();
         }
       }
     },
     playerVars: {
-      'autoplay': 0,        // Don't autoplay video
-      'controls': 1,        // Show player controls
-      'rel': 0,             // Don't show related videos at the end
-      'modestbranding': 1,  // Minimize YouTube branding
-      'mute': 1             // Start video muted
+      'autoplay': 0,
+      'controls': 1,
+      'rel': 0,
+      'modestbranding': 1,
+      'mute': 1
     }
   });
 }
-
 
 function onPlayerReady(event) {
   // Player is ready
 }
 
 // Video progression callbacks
-
-// Callback function triggered when the intro video ends
+// ─── 2) Replace your onIntroEnd() with this ───
 function onIntroEnd() {
-  // Hide all currently visible video sections
   hideAllVideoSections();
-
-  // Activate the first decision section by adding a specific class
   document.getElementById('decision1-section')
           .classList.add('active-decision');
 }
 
 
-// Callback function triggered when the first jump video ends
 function onJump1End() {
-  // Hide all video sections to prepare for the next interaction
   hideAllVideoSections();
-
-  // Reactivate the first decision section (same as after the intro)
   document.getElementById('decision1-section').classList.add('active-decision');
 }
 
-// Callback when the 'Dorm' branch video ends
+// ─── 3) Replace your onDormEnd() with this ───
 function onDormEnd() {
-  // Hide all video sections to clear the screen
   hideAllVideoSections();
-
-  // Show the shared final return video section
   document.getElementById('final-return-section')
           .classList.add('active-video-section');
-
-  // Play the final return video
   players['final-return-video'].playVideo();
 }
 
-// Callback when the 'Bathroom' branch video ends
+
+// ─── 4) Replace your onBathroomEnd() with this ───
 function onBathroomEnd() {
-  // Hide all video sections to clear the screen
   hideAllVideoSections();
-
-  // Show the shared final return video section
   document.getElementById('final-return-section')
           .classList.add('active-video-section');
-
-  // Play the final return video
   players['final-return-video'].playVideo();
 }
 
-// Callback when the final return video ends
+// ─── 5) Replace your onFinalReturnEnd() with this ───
 function onFinalReturnEnd() {
-  // Hide all video sections
   hideAllVideoSections();
-
-  // Show the second decision point
   document.getElementById('decision2-section')
           .classList.add('active-decision');
 }
 
 
-// Hides all currently active video and decision sections
 function hideAllVideoSections() {
-  // Remove 'active-video-section' class from all video sections
   document.querySelectorAll('.video-section').forEach(section => {
     section.classList.remove('active-video-section');
   });
-
-  // Remove 'active-decision' class from all decision points
   document.querySelectorAll('.decision-point').forEach(section => {
     section.classList.remove('active-decision');
   });
 }
 
-// Restarts the entire experience from the intro video
 function restartExperience() {
-  // Hide any currently active sections
   hideAllVideoSections();
-
-  // Show the intro video section
   document.getElementById('intro-section').classList.add('active-video-section');
-
-  // Restart the intro video from the beginning and play it
   if (players['intro-video']) {
     players['intro-video'].seekTo(0);
     players['intro-video'].playVideo();
   }
 }
-
 
 // Initialize video experience buttons
 document.addEventListener('DOMContentLoaded', function() {
@@ -290,12 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const destroyGlasses = document.getElementById('destroy-glasses');
   const restartBtn1 = document.getElementById('restart-btn1');
   const restartBtn2 = document.getElementById('restart-btn2');
-
-
-// Attach click event listeners for all decision buttons and restart options:
-// - Each choice hides all sections, activates the relevant video section, and plays the video.
-
-
+  
   if (dormChoice) {
     dormChoice.addEventListener('click', function() {
       hideAllVideoSections();
@@ -327,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
       players['ending-destroy-video'].playVideo();
     });
   }
-  // - Restart buttons reset the experience to the intro video.
+  
   if (restartBtn1) {
     restartBtn1.addEventListener('click', restartExperience);
   }
@@ -383,8 +328,6 @@ class ImmersiveScene {
     
     this.init();
   }
-
-  // Returns an array of themed environment configurations, each with unique visuals, lighting, particle effects, and ambient styles.
 
   createEnvironments() {
     return [
@@ -553,8 +496,6 @@ class ImmersiveScene {
     this.animate();
   }
 
-  // Sets up the environment changer button, including event handling, preview creation, and initial UI update.
-
   setupEnvironmentChanger() {
     this.environmentButton = document.getElementById('envChanger');
     if (this.environmentButton) {
@@ -569,7 +510,6 @@ class ImmersiveScene {
       this.updateEnvironmentButton();
     }
   }
-// Creates and attaches the environment preview UI element with hover event listeners for showing and hiding.
 
   createEnvironmentPreview() {
     const preview = document.createElement('div');
@@ -592,8 +532,6 @@ class ImmersiveScene {
       this.hidePreview();
     });
   }
-
-  // Displays the preview tooltip showing details of the upcoming environment.
 
   showPreview() {
     if (this.previewElement) {
@@ -618,8 +556,6 @@ class ImmersiveScene {
       this.previewElement.style.transform = 'translateY(-50%) translateX(-10px)';
     }
   }
-
-  // Hides the environment preview tooltip by resetting its opacity, visibility, and position.
 
   hidePreview() {
     if (this.previewElement) {
@@ -837,9 +773,7 @@ glasses.add(rightHinge);
       side: THREE.DoubleSide,
       envMapIntensity: 1.0
   });
-
-  // Create and position the left and right lenses, then add them to the glasses group.
-
+  
   const leftLens = new THREE.Mesh(lensGeometry, lensMaterial);
   leftLens.position.set(-1.3, 0, 0.05);
   glasses.add(leftLens);
@@ -857,10 +791,7 @@ glasses.add(rightHinge);
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending
   });
-
   
-  // Create and position glowing energy rings around each lens, then add them to the glasses group.
-
   const leftEnergyRing = new THREE.Mesh(energyRingGeometry, energyMaterial);
   leftEnergyRing.position.set(-1.3, 0, 0.1);
   glasses.add(leftEnergyRing);
@@ -878,10 +809,7 @@ glasses.add(rightHinge);
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending
   });
-
   
-  // Create and position the core elements inside each lens, then add them to the glasses group.
-
   const leftCore = new THREE.Mesh(coreGeometry, coreMaterial);
   leftCore.position.set(-1.3, 0, 0.12);
   glasses.add(leftCore);
@@ -898,9 +826,7 @@ glasses.add(rightHinge);
       roughness: 0.3,
       clearcoat: 0.8
   });
-
-  // Create and position the left and right nose pads, then add them to the glasses group.
-
+  
   const leftNosePad = new THREE.Mesh(nosePadGeometry, nosePadMaterial);
   leftNosePad.position.set(-0.5, -0.3, 0.2);
   glasses.add(leftNosePad);
@@ -919,9 +845,7 @@ glasses.add(rightHinge);
       emissive: 0x4c1d95,
       emissiveIntensity: 0.1
   });
-
-  // Create and position tech accent pieces on each side of the glasses, then add them to the glasses group.
-
+  
   const leftAccent = new THREE.Mesh(techAccentGeometry, techMaterial);
   leftAccent.position.set(-1.95, 0.2, 0);
   glasses.add(leftAccent);
@@ -940,9 +864,7 @@ glasses.add(rightHinge);
       emissive: 0x7c3aed,
       emissiveIntensity: 0.05
   });
-
-  // Create and position the left and right rim pieces, rotate them appropriately, and add to the glasses group.
-
+  
   const leftRim = new THREE.Mesh(rimGeometry, rimMaterial);
   leftRim.position.set(-1.3, 0, 0.03);
   leftRim.rotation.z = Math.PI/2;
@@ -1049,9 +971,7 @@ glasses.add(rightHinge);
       // Phase for wave motions
       phases[i] = Math.random() * Math.PI * 2;
     }
-
-    // Set up particle system attributes and material, create the particle Points object, store movement data, and add it to the scene and particle list.
-
+    
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
@@ -1074,8 +994,6 @@ glasses.add(rightHinge);
     this.scene.add(particles);
     this.particles.push(particles);
   }
-  
-// Updates particle positions and behaviors per frame based on their movement type, including wrapping and dynamic opacity effects.
 
   updateParticleMovement() {
     this.particles.forEach(particle => {
@@ -1166,8 +1084,6 @@ glasses.add(rightHinge);
     });
   }
 
-  // Sets up mouse movement tracking and click detection on the glasses object using raycasting.
-
   setupInteractions() {
     document.addEventListener('mousemove', (event) => {
       this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -1246,6 +1162,7 @@ glasses.add(rightHinge);
 
   switchRoom() {
     // (Keep original room switching code unchanged)
+    // ... [Previous room switching code] ...
   }
 
   animate() {
@@ -1310,9 +1227,6 @@ glasses.add(rightHinge);
     this.renderer.render(this.scene, this.camera);
   }
 
-
-  // Animates point light intensities and positions dynamically based on the current environment’s theme.
-
   updateDynamicLighting() {
     const time = Date.now() * 0.001;
     const currentEnv = this.environments[this.currentEnvironment];
@@ -1346,9 +1260,6 @@ glasses.add(rightHinge);
     });
   }
 }
-
-
-// AudioVisualizer class handles loading an audio file, initializing Web Audio API context, and setting up frequency analysis for visualization.
 
 class AudioVisualizer {
   constructor() {
@@ -1539,10 +1450,6 @@ class NavigationSystem {
   }
 }
 
-
-// Manages UI interactions for selecting teleportation glasses, including button effects and audio-visual feedback.
-
-
 class InteractionSystem {
     constructor() {
     this.panel = document.getElementById('interactionPanel');
@@ -1564,7 +1471,7 @@ class InteractionSystem {
       });
     });
   }
-// Handles triggering the teleport effect and advancing the scene after user input.
+
   triggerGlasses(type, button, clickEvent) {
     button.classList.add('active');
     
