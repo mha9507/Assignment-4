@@ -97,7 +97,7 @@
       box-shadow: var(--shadow-lg), var(--shadow-accent);
       animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-
+/* Instruction box styles: title, text, and responsive design */
     .instruction-box h3 {
       font-family: 'Inter', sans-serif;
       font-weight: 700;
@@ -1476,3 +1476,22 @@
         margin: 20px auto;
       }
     }
+
+    
+.lenses-hub-title {
+  /* fluid font size between 2rem and 3rem, scaling with viewport */
+  font-size: clamp(2rem, 6vw, 3rem);
+
+  /* center the text in its container */
+  text-align: center;
+  margin: 0 auto;
+
+  /* allow normal wrapping */
+  white-space: normal;
+
+  /* tighten up the line spacing so it never gets too loose */
+  line-height: 1.2;
+
+  /* optional: limit its max width so it never runs super long */
+  max-width: 90vw;
+}

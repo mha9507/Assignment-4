@@ -16,6 +16,7 @@ class AdvancedCursor {
     this.init();
   }
 
+  // Initialize cursor system
   init() {
     // Create trail elements
     for (let i = 0; i < 10; i++) {
@@ -32,6 +33,7 @@ class AdvancedCursor {
       });
     }
 
+    // Set initial cursor position
     document.addEventListener('mousemove', (e) => {
       this.mouse.x = e.clientX;
       this.mouse.y = e.clientY;
@@ -40,6 +42,7 @@ class AdvancedCursor {
     this.animate();
   }
 
+  // Animate cursor and trails
   animate() {
     if (!this.cursor) return;
     
@@ -84,6 +87,7 @@ window.addEventListener('load', () => {
     portalCore.appendChild(particle);
   }
 
+  // Add portal energy rings
   let progress = 0;
   const minIncrement = 1;  // Minimum percentage increment
   const maxIncrement = 4;  // Maximum percentage increment
@@ -97,6 +101,7 @@ window.addEventListener('load', () => {
       maxIncrement // Never more than maxIncrement
     );
     
+    // Ensure we don't overshoot 100%
     progress += increment;
     
     // Add some random variation to make it feel more organic
@@ -121,6 +126,24 @@ window.addEventListener('load', () => {
 // YouTube Player API for Video Experience
 let players = {};
 
+function pauseAllVideos(exceptId = null) {
+  // stop any player that is not the one we’re about to play
+  Object.entries(players).forEach(([id, pl]) => {
+    if (!exceptId || id !== exceptId) {
+      const st = pl.getPlayerState?.();
+      if (st === YT.PlayerState.PLAYING || st === YT.PlayerState.BUFFERING) {
+        pl.pauseVideo();
+      }
+    }
+  });
+}
+
+// Stop all videos
+function stopAllVideos() {
+  Object.values(players).forEach((pl) => pl.stopVideo?.());
+}
+
+// Initialize YouTube Iframe API
 function initYouTubePlayers() {
   const tag = document.createElement('script');
   tag.src = "https://www.youtube.com/iframe_api";
@@ -145,71 +168,59 @@ window.onYouTubeIframeAPIReady = function() {
   createPlayer('ending-destroy-video',  'oCyEZFsMiS0');
 };
 
-
-function createPlayer(elementId, videoId, onEndCallback) {
+// Create a YouTube player instance
+function createPlayer(elementId, videoId, onEnd) {
   players[elementId] = new YT.Player(elementId, {
-    videoId: videoId,
+    videoId,
+    playerVars: { autoplay: 0, controls: 1, rel: 0, modestbranding: 1 },
     events: {
-      'onReady': onPlayerReady,
-      'onStateChange': function(event) {
-        if (event.data === YT.PlayerState.ENDED && onEndCallback) {
-          onEndCallback();
-        }
-      }
+      onReady: () => { },
+      onStateChange: (e) => {
+        if (e.data === YT.PlayerState.PLAYING) pauseAllVideos(elementId); // ✅ never two at once
+        if (e.data === YT.PlayerState.ENDED && onEnd) onEnd();
+      },
     },
-    playerVars: {
-      'autoplay': 0,
-      'controls': 1,
-      'rel': 0,
-      'modestbranding': 1,
-      'mute': 1
-    }
   });
 }
 
+// Player ready callback
 function onPlayerReady(event) {
   // Player is ready
 }
 
 // Video progression callbacks
-// ─── 2) Replace your onIntroEnd() with this ───
 function onIntroEnd() {
   hideAllVideoSections();
   document.getElementById('decision1-section')
           .classList.add('active-decision');
 }
-
-
+// Jump 1 end callback
 function onJump1End() {
   hideAllVideoSections();
   document.getElementById('decision1-section').classList.add('active-decision');
 }
-
-// ─── 3) Replace your onDormEnd() with this ───
+// Dorm end callback
 function onDormEnd() {
   hideAllVideoSections();
   document.getElementById('final-return-section')
           .classList.add('active-video-section');
   players['final-return-video'].playVideo();
 }
-
-
-// ─── 4) Replace your onBathroomEnd() with this ───
+// Bathroom end callback
 function onBathroomEnd() {
   hideAllVideoSections();
   document.getElementById('final-return-section')
           .classList.add('active-video-section');
   players['final-return-video'].playVideo();
 }
-
-// ─── 5) Replace your onFinalReturnEnd() with this ───
+// Final return video end callback
 function onFinalReturnEnd() {
   hideAllVideoSections();
   document.getElementById('decision2-section')
           .classList.add('active-decision');
 }
 
-
+// Hide all video sections and decision points
 function hideAllVideoSections() {
   document.querySelectorAll('.video-section').forEach(section => {
     section.classList.remove('active-video-section');
@@ -218,7 +229,7 @@ function hideAllVideoSections() {
     section.classList.remove('active-decision');
   });
 }
-
+// Restart the experience from the intro section
 function restartExperience() {
   hideAllVideoSections();
   document.getElementById('intro-section').classList.add('active-video-section');
@@ -241,6 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const restartBtn1 = document.getElementById('restart-btn1');
   const restartBtn2 = document.getElementById('restart-btn2');
   
+  // Dorm choice
   if (dormChoice) {
     dormChoice.addEventListener('click', function() {
       hideAllVideoSections();
@@ -248,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
       players['dorm-video'].playVideo();
     });
   }
-  
+  // Bathroom choice
   if (bathroomChoice) {
     bathroomChoice.addEventListener('click', function() {
       hideAllVideoSections();
@@ -256,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
       players['bathroom-video'].playVideo();
     });
   }
-  
+  // Use or destroy glasses choice
   if (useGlasses) {
     useGlasses.addEventListener('click', function() {
       hideAllVideoSections();
@@ -264,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
       players['ending-use-video'].playVideo();
     });
   }
-  
+  // Destroy glasses choice
   if (destroyGlasses) {
     destroyGlasses.addEventListener('click', function() {
       hideAllVideoSections();
@@ -282,6 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Initialize all systems
 function initAllSystems() {
   // Initialize all systems
   const cursor = new AdvancedCursor();
@@ -329,6 +342,7 @@ class ImmersiveScene {
     this.init();
   }
 
+  // Create immersive environments
   createEnvironments() {
     return [
       {
@@ -510,7 +524,7 @@ class ImmersiveScene {
       this.updateEnvironmentButton();
     }
   }
-
+// Create environment preview element
   createEnvironmentPreview() {
     const preview = document.createElement('div');
     preview.className = 'env-preview';
@@ -519,7 +533,7 @@ class ImmersiveScene {
       <div class="env-preview-desc"></div>
       <div class="env-preview-colors"></div>
     `;
-    
+    // Style the preview
     this.environmentButton.parentNode.appendChild(preview);
     this.previewElement = preview;
     
@@ -532,7 +546,7 @@ class ImmersiveScene {
       this.hidePreview();
     });
   }
-
+// Setup interactions for teleportation glasses
   showPreview() {
     if (this.previewElement) {
       const nextEnv = this.environments[(this.currentEnvironment + 1) % this.environments.length];
@@ -550,13 +564,14 @@ class ImmersiveScene {
         dot.style.backgroundColor = color;
         colors.appendChild(dot);
       });
-      
+      // Position and style the preview
       this.previewElement.style.opacity = '1';
       this.previewElement.style.visibility = 'visible';
       this.previewElement.style.transform = 'translateY(-50%) translateX(-10px)';
     }
   }
 
+// Hide the environment preview
   hidePreview() {
     if (this.previewElement) {
       this.previewElement.style.opacity = '0';
@@ -564,7 +579,7 @@ class ImmersiveScene {
       this.previewElement.style.transform = 'translateY(-50%) translateX(0)';
     }
   }
-
+// Update environment button with current environment
   updateEnvironmentButton() {
     if (this.environmentButton) {
       const env = this.environments[this.currentEnvironment];
@@ -579,7 +594,7 @@ class ImmersiveScene {
       if (text) text.textContent = env.name;
     }
   }
-
+// Switch to next environment with enhanced transition
   switchEnvironment() {
     // Create enhanced transition effect
     this.createEnhancedTransition();
@@ -596,7 +611,7 @@ class ImmersiveScene {
       this.updateEnvironmentButton();
     }, 750);
   }
-
+// Create enhanced transition effect with particles and wave
   createEnhancedTransition() {
     const transition = document.createElement('div');
     transition.className = 'environment-transition';
@@ -620,7 +635,7 @@ class ImmersiveScene {
       particle.style.backgroundColor = this.environments[this.currentEnvironment].colors[Math.floor(Math.random() * 3)];
       particleContainer.appendChild(particle);
     }
-    
+    // Append particles to transition
     transition.appendChild(particleContainer);
     document.body.appendChild(transition);
     
@@ -628,7 +643,7 @@ class ImmersiveScene {
       transition.remove();
     }, 2000);
   }
-
+// Create lighting for the environment
   applyEnvironment(envIndex) {
     const env = this.environments[envIndex];
     
@@ -643,7 +658,7 @@ class ImmersiveScene {
     // Ensure glasses remain purple in all environments
     this.maintainGlassesPurpleColor();
   }
-
+// Create lighting based on environment configuration
   maintainGlassesPurpleColor() {
     if (this.glasses && this.glasses.userData && this.glasses.userData.lensEffect) {
       // Force glasses to stay purple regardless of environment
@@ -666,7 +681,7 @@ class ImmersiveScene {
       });
     }
   }
-
+// Create lighting based on environment configuration
   clearEnvironment() {
     // Remove existing lights (except those attached to glasses)
     this.lights.forEach(light => {
@@ -680,7 +695,7 @@ class ImmersiveScene {
     });
     this.particles = [];
   }
-
+// Create lighting based on environment configuration
   updateBackground(bgConfig) {
     if (bgConfig.gradient) {
       // Update CSS background for gradient effect
@@ -696,7 +711,7 @@ class ImmersiveScene {
     // (Keep original room creation code unchanged)
     // ... [Previous room creation code] ...
   }
-
+// Create lighting based on environment configuration
 createGlasses() {
   const glasses = new THREE.Group();
   
@@ -792,10 +807,12 @@ glasses.add(rightHinge);
       blending: THREE.AdditiveBlending
   });
   
+  // Left and right energy rings
   const leftEnergyRing = new THREE.Mesh(energyRingGeometry, energyMaterial);
   leftEnergyRing.position.set(-1.3, 0, 0.1);
   glasses.add(leftEnergyRing);
   
+  // Right energy ring
   const rightEnergyRing = new THREE.Mesh(energyRingGeometry, energyMaterial);
   rightEnergyRing.position.set(1.3, 0, 0.1);
   glasses.add(rightEnergyRing);
@@ -809,11 +826,12 @@ glasses.add(rightHinge);
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending
   });
-  
+  // Left and right energy cores
   const leftCore = new THREE.Mesh(coreGeometry, coreMaterial);
   leftCore.position.set(-1.3, 0, 0.12);
   glasses.add(leftCore);
   
+  // Right energy core
   const rightCore = new THREE.Mesh(coreGeometry, coreMaterial);
   rightCore.position.set(1.3, 0, 0.12);
   glasses.add(rightCore);
@@ -826,11 +844,12 @@ glasses.add(rightHinge);
       roughness: 0.3,
       clearcoat: 0.8
   });
-  
+  // Left and right nose pads
   const leftNosePad = new THREE.Mesh(nosePadGeometry, nosePadMaterial);
   leftNosePad.position.set(-0.5, -0.3, 0.2);
   glasses.add(leftNosePad);
   
+  // Right nose pad
   const rightNosePad = new THREE.Mesh(nosePadGeometry, nosePadMaterial);
   rightNosePad.position.set(0.5, -0.3, 0.2);
   glasses.add(rightNosePad);
@@ -971,12 +990,13 @@ glasses.add(rightHinge);
       // Phase for wave motions
       phases[i] = Math.random() * Math.PI * 2;
     }
-    
+    // Create buffer attributes
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
     particleGeometry.setAttribute('phase', new THREE.BufferAttribute(phases, 1));
     
+    // Create particle material with enhanced properties
     const particleMaterial = new THREE.PointsMaterial({
       size: particleConfig.size,
       vertexColors: true,
@@ -994,7 +1014,7 @@ glasses.add(rightHinge);
     this.scene.add(particles);
     this.particles.push(particles);
   }
-
+// Main animation loop
   updateParticleMovement() {
     this.particles.forEach(particle => {
       const positions = particle.geometry.attributes.position.array;
@@ -1083,7 +1103,7 @@ glasses.add(rightHinge);
       }
     });
   }
-
+// Dynamic lighting updates based on environment
   setupInteractions() {
     document.addEventListener('mousemove', (event) => {
       this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -1099,7 +1119,7 @@ glasses.add(rightHinge);
       }
     });
   }
-
+// Use teleportation glasses with enhanced effects
   useGlasses() {
     if (this.glasses.userData.isActive) return;
     
@@ -1226,7 +1246,7 @@ glasses.add(rightHinge);
 
     this.renderer.render(this.scene, this.camera);
   }
-
+// Initialize the teleportation glasses
   updateDynamicLighting() {
     const time = Date.now() * 0.001;
     const currentEnv = this.environments[this.currentEnvironment];
@@ -1260,7 +1280,7 @@ glasses.add(rightHinge);
     });
   }
 }
-
+// Audio Visualizer for teleportation sound
 class AudioVisualizer {
   constructor() {
     this.container = document.getElementById('audioVisualizer');
@@ -1276,7 +1296,7 @@ class AudioVisualizer {
     this.audioElement.load();
     this.initVisualizer();
   }
-
+// Initialize the audio context and analyser
   async initAudio() {
     try {
       console.log('Initializing audio context...');
@@ -1299,7 +1319,7 @@ class AudioVisualizer {
       return false;
     }
   }
-
+// Initialize the visualizer bars
   initVisualizer() {
     // Create visualizer bars
     for (let i = 0; i < 12; i++) {
@@ -1311,33 +1331,27 @@ class AudioVisualizer {
       this.bars.push(bar);
     }
   }
+// Play the teleport sound and visualize it
+playTeleportSound() {
+  console.log('Attempting to play sound.');
 
-  async playTeleportSound() {
-    console.log('Attempting to play sound...');
-    
-    // Initialize audio if not already done
-    if (!this.audioContext) {
-      const success = await this.initAudio();
-      if (!success) return;
-    }
-
-    try {
-      // Handle iOS/Safari suspension
-      if (this.audioContext.state === 'suspended') {
-        console.log('Audio context suspended, attempting to resume...');
-        await this.audioContext.resume();
-      }
-
-      console.log('Playing audio...');
-      this.audioElement.currentTime = 0;
-      await this.audioElement.play().catch(e => {
-        console.error("Audio playback failed:", e);
-      });
-    } catch (e) {
-      console.error('Audio playback error:', e);
-    }
+  // lazy-init audioContext (no await!)
+  if (!this.audioContext) {
+    this.initAudio();
   }
 
+  // resume if suspended (no await!)
+  if (this.audioContext?.state === 'suspended') {
+    this.audioContext.resume();
+  }
+
+  // reset and play, catching any promise errors
+  this.audioElement.currentTime = 0;
+  const p = this.audioElement.play();
+  if (p) p.catch(e => console.error("Audio playback failed:", e));
+}
+
+// Trigger the visualization based on type
   async triggerVisualization(type) {
     if (this.isActive) return;
     
@@ -1449,7 +1463,7 @@ class NavigationSystem {
     this.currentSection = scene;
   }
 }
-
+// Interaction System for teleportation glasses
 class InteractionSystem {
     constructor() {
     this.panel = document.getElementById('interactionPanel');
@@ -1471,7 +1485,7 @@ class InteractionSystem {
       });
     });
   }
-
+// Trigger teleportation glasses with sound and visual effects
   triggerGlasses(type, button, clickEvent) {
     button.classList.add('active');
     
@@ -1503,27 +1517,26 @@ function showVideoRoom() {
 }
 
 function closeVideoRoom() {
-  const videoOverlay = document.getElementById('videoRoomOverlay');
-  videoOverlay.classList.remove('active');
+  document.getElementById('videoRoomOverlay').classList.remove('active');
+  stopAllVideos();                       // ✅ kill playback
 }
 
 // Section Close Function
 function closeSection() {
-  // Hide all content sections
-  document.querySelectorAll('.content-section').forEach(section => {
-    section.classList.remove('active');
-  });
-  
-  // Set Room as active in navigation
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.classList.toggle('active', item.dataset.scene === 'room');
-  });
-  
-  // Update navigation system current section
-  if (window.app && window.app.navigationSystem) {
-    window.app.navigationSystem.currentSection = 'room';
-  }
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.scene === 'room'));
+  if (window.app?.navigationSystem) window.app.navigationSystem.currentSection = 'room';
+  stopAllVideos();                       // ✅ kill playback
+// Set Room as active in navigation
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.classList.toggle('active', item.dataset.scene === 'room');
+});
+
+// Update navigation system current section
+if (window.app && window.app.navigationSystem) {
+  window.app.navigationSystem.currentSection = 'room';
 }
+} // <-- Add this closing brace to end closeSection function
 
 // Resize handler
 window.addEventListener('resize', () => {
@@ -1533,3 +1546,15 @@ window.addEventListener('resize', () => {
     window.app.scene.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 });
+
+// after you create your camera…
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+if (isMobile) {
+  // push camera farther back
+  app.scene.camera.position.z = app.scene.camera.position.z + 2;
+  // optional: widen the field-of-view
+  app.scene.camera.fov = app.scene.camera.fov + 10;
+  app.scene.camera.updateProjectionMatrix();
+}
+
+window.addEventListener('beforeunload', stopAllVideos); // ✅ tidy up
