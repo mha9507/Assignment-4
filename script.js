@@ -1358,7 +1358,7 @@ class AudioVisualizer {
     this.audioContext = null;
     this.analyser = null;
     this.dataArray = null;
-    this.audioElement = new Audio('teleport.wav');
+    this.audioElement = new Audio('media/teleport.wav');
     this.audioElement.preload = 'auto';
     
     // Pre-load the audio file
