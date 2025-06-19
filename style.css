@@ -4,8 +4,14 @@
       box-sizing: border-box;
     }
 
+
+/* Importing 'Inter' font family from Google Fonts with multiple weights */
+
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
+
+
+/* CSS Custom Properties: define the color palette, shadows, border radii, and transition timings used throughout the UI */
+
     :root {
       --primary: #0a0a0f;
       --secondary: #151520;
@@ -33,6 +39,9 @@
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+
+/* Base styles for body: font, background gradients, text color, cursor hiding, and smooth font rendering */
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -532,6 +541,8 @@
       box-shadow: var(--shadow-accent);
       border-color: var(--accent);
     }
+
+/* Content slide-in animation: subtle upward movement with scaling */
 
     @keyframes contentSlideIn {
       from {
@@ -1073,6 +1084,8 @@
       transform: translate(-50%, -50%);
       animation: waveExpand 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
+/* Wave expand keyframe for scaling and fading effect during transitions */
+
 
     @keyframes waveExpand {
       0% { 
@@ -1091,6 +1104,8 @@
       }
     }
 
+/* Styles for full-screen particle container and individual animated particles */
+
     .transition-particles {
       position: absolute;
       top: 0;
@@ -1108,6 +1123,9 @@
       border-radius: 50%;
       animation: particleFloat 2s linear forwards;
     }
+
+
+/* Particle float animation: fades and scales particles in and out smoothly */
 
     @keyframes particleFloat {
       0% {
@@ -1274,6 +1292,8 @@
       }
     }
 
+/* Responsive styles for screens 768px wide or less to optimize layout, typography, and UI elements */
+
     @media (max-width: 768px) {
       body {
         cursor: auto;
@@ -1407,6 +1427,8 @@
         display: none;
       }
     }
+
+/* Additional responsive adjustments for very small screens (max-width: 480px) to enhance usability and layout */
 
     @media (max-width: 480px) {
       .nav-system {
